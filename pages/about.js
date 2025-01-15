@@ -1,36 +1,55 @@
-import Head from 'next/head'
+import Layout from '../components/Layout'
+import Newsletter from '../components/Newsletter'
 
 export default function About() {
-  return (
-    <div className="min-h-screen bg-white">
-      <Head>
-        <title>About - Alexandre Carvalho</title>
-        <meta name="description" content="About me" />
-      </Head>
+  const skills = [
+    { category: "Languages", items: ["JavaScript", "TypeScript", "Python", "Solidity"] },
+    { category: "Frontend", items: ["React", "Next.js", "TailwindCSS", "GraphQL"] },
+    { category: "Backend", items: ["Node.js", "Express", "PostgreSQL", "MongoDB"] },
+    { category: "Tools", items: ["Git", "Docker", "AWS", "Web3"] }
+  ]
 
-      <main className="container mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold mb-8">About Me</h1>
-        
-        <div className="prose lg:prose-xl">
-          <p className="text-xl text-gray-600 mb-6">
-            I'm a software engineer passionate about building great products and solving interesting problems.
-          </p>
-          
-          <h2 className="text-2xl font-bold mt-8 mb-4">Skills</h2>
-          <ul className="list-disc list-inside space-y-2 text-gray-600">
-            <li>Frontend Development (React, Next.js)</li>
-            <li>Backend Development</li>
-            <li>Cloud Architecture</li>
-            <li>System Design</li>
-          </ul>
-          
-          <h2 className="text-2xl font-bold mt-8 mb-4">Interests</h2>
-          <p className="text-gray-600">
-            When I'm not coding, you can find me reading about technology, 
-            exploring new tools and frameworks, or contributing to open-source projects.
-          </p>
-        </div>
-      </main>
-    </div>
+  return (
+    <Layout>
+      <div className="space-y-24">
+        <section>
+          <h1 className="text-3xl font-bold mb-8 text-glow">&gt; about me</h1>
+          <div className="space-y-8 text-primary-light">
+            <p className="text-xl">
+              CTPO with a passion for building innovative solutions in AI and blockchain.
+              Currently focused on developing scalable applications and exploring the
+              intersection of artificial intelligence and decentralized systems.
+            </p>
+            <p>
+              With over a decade of experience in software development and technical leadership,
+              I've led teams in delivering complex projects across various domains.
+            </p>
+          </div>
+        </section>
+
+        <section className="space-y-8">
+          <h2 className="text-2xl font-bold text-primary">&gt; skills</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {skills.map((skillSet, index) => (
+              <div key={index} className="border border-primary-dark p-6 hover:border-primary transition-colors">
+                <h3 className="text-lg font-medium mb-4 text-primary">{skillSet.category}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {skillSet.items.map((skill, skillIndex) => (
+                    <span key={skillIndex} className="px-3 py-1 text-sm bg-primary-dark text-primary border border-primary-medium">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-8">
+          <h2 className="text-2xl font-bold text-primary">&gt; connect</h2>
+          <Newsletter />
+        </section>
+      </div>
+    </Layout>
   )
 }
