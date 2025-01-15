@@ -13,11 +13,8 @@ export default function Layout({ children }) {
       <header className="py-8">
         <div className="container-custom">
           <div className="flex flex-col space-y-4">
-            <Link href="/" className="text-xl font-bold hover:text-glow">
-              AC
-            </Link>
             <h1 className="text-4xl font-bold text-glow">ALEXANDRE CARVALHO</h1>
-            <h2 className="text-primary-light">SOFTWARE ENGINEER</h2>
+            <h2 className="text-primary-light">CTPO | GEN AI | DECENTRALIZED LEDGER TECH</h2>
             <nav className="flex space-x-8 text-primary-light">
               <Link href="/" className="hover:text-primary transition-colors">
                 HOME
