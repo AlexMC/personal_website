@@ -1,26 +1,16 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { getContributionsData } from '../lib/github';
 
 const ContributionsChart = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [contributions, setContributions] = useState([]);
+  const [data, setData] = useState({ contributions: {}, totalContributions: 0 });
 
   useEffect(() => {
     const fetchContributions = async () => {
       try {
-        const response = await axios.get('https://api.github.com/users/alexmc/events');
-        const pushEvents = response.data
-          .filter(event => event.type === 'PushEvent')
-          .slice(0, 365); // Full year of contributions
-
-        const contributionData = pushEvents.reduce((acc, event) => {
-          const date = new Date(event.created_at).toISOString().split('T')[0];
-          acc[date] = (acc[date] || 0) + event.payload.commits.length;
-          return acc;
-        }, {});
-
-        setContributions(contributionData);
+        const contributionsData = await getContributionsData();
+        setData(contributionsData);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching contributions:', err);
@@ -32,6 +22,14 @@ const ContributionsChart = () => {
     fetchContributions();
   }, []);
 
+  const getContributionColor = (count) => {
+    if (count === 0) return 'bg-primary-dark';
+    if (count <= 3) return 'bg-primary-medium opacity-40';
+    if (count <= 6) return 'bg-primary-medium opacity-70';
+    if (count <= 9) return 'bg-primary-light opacity-80';
+    return 'bg-primary';
+  };
+
   const renderContributionGrid = () => {
     const today = new Date();
     const days = [];
@@ -42,18 +40,12 @@ const ContributionsChart = () => {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
       const dateStr = date.toISOString().split('T')[0];
-      const count = contributions[dateStr] || 0;
+      const count = data.contributions[dateStr] || 0;
       
       days.push({
         date: dateStr,
         count,
-        color: count === 0 
-          ? 'bg-primary-dark' 
-          : count <= 2 
-          ? 'bg-primary-medium' 
-          : count <= 4 
-          ? 'bg-primary-light' 
-          : 'bg-primary'
+        color: getContributionColor(count)
       });
 
       if (days.length === 7 || i === 0) {
@@ -63,42 +55,58 @@ const ContributionsChart = () => {
     }
 
     return (
-      <div className="inline-grid grid-flow-col gap-[3px]">
-        {weeks.map((week, weekIndex) => (
-          <div key={weekIndex} className="grid grid-rows-7 gap-[3px]">
-            {week.map((day, dayIndex) => (
-              <div
-                key={`${weekIndex}-${dayIndex}`}
-                className={`w-[10px] h-[10px] ${day.color} transition-all duration-300 hover:scale-110 hover:shadow-glow`}
-                title={`${day.date}: ${day.count} contributions`}
-              />
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="text-primary-light">
+            {data.totalContributions.toLocaleString()} contributions in the last year
+          </div>
+          <div className="flex items-center space-x-2 text-xs">
+            <span className="text-primary-light">Less</span>
+            <div className="flex space-x-1">
+              <div className="w-[10px] h-[10px] bg-primary-dark" />
+              <div className="w-[10px] h-[10px] bg-primary-medium opacity-40" />
+              <div className="w-[10px] h-[10px] bg-primary-medium opacity-70" />
+              <div className="w-[10px] h-[10px] bg-primary-light opacity-80" />
+              <div className="w-[10px] h-[10px] bg-primary" />
+            </div>
+            <span className="text-primary-light">More</span>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <div className="inline-grid grid-flow-col gap-[3px] min-w-full">
+            {weeks.map((week, weekIndex) => (
+              <div key={weekIndex} className="grid grid-rows-7 gap-[3px]">
+                {week.map((day, dayIndex) => (
+                  <div
+                    key={`${weekIndex}-${dayIndex}`}
+                    className={`contribution-cell ${day.color}`}
+                    title={`${day.date}: ${day.count} contributions`}
+                  />
+                ))}
+              </div>
             ))}
           </div>
-        ))}
+        </div>
       </div>
     );
   };
 
   if (loading) {
     return (
-      <div className="section">
-        <div className="container-custom">
-          <h2 className="text-2xl font-bold mb-8 text-glow">&gt; git contributions</h2>
-          <div className="p-6 bg-surface rounded-none border border-primary-dark">
-            <div className="flex justify-center">
-              <div className="inline-grid grid-flow-col gap-[3px]">
-                {Array(52).fill(0).map((_, weekIndex) => (
-                  <div key={weekIndex} className="grid grid-rows-7 gap-[3px]">
-                    {Array(7).fill(0).map((_, dayIndex) => (
-                      <div
-                        key={`${weekIndex}-${dayIndex}`}
-                        className="w-[10px] h-[10px] bg-primary-dark animate-pulse"
-                      />
-                    ))}
-                  </div>
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-primary">&gt; git contributions</h2>
+        <div className="overflow-x-auto">
+          <div className="inline-grid grid-flow-col gap-[3px] min-w-full">
+            {Array(52).fill(0).map((_, weekIndex) => (
+              <div key={weekIndex} className="grid grid-rows-7 gap-[3px]">
+                {Array(7).fill(0).map((_, dayIndex) => (
+                  <div
+                    key={`${weekIndex}-${dayIndex}`}
+                    className="contribution-cell bg-primary-dark animate-pulse"
+                  />
                 ))}
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -107,44 +115,17 @@ const ContributionsChart = () => {
 
   if (error) {
     return (
-      <div className="section">
-        <div className="container-custom">
-          <h2 className="text-2xl font-bold mb-8 text-glow">&gt; git contributions</h2>
-          <div className="p-6 bg-surface rounded-none border border-primary-dark">
-            <p className="text-primary-light text-center">
-              <span className="loading-cursor">Unable to load contributions_</span>
-            </p>
-          </div>
-        </div>
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-primary">&gt; git contributions</h2>
+        <div className="text-primary-light">Failed to load contribution data.</div>
       </div>
     );
   }
 
   return (
-    <div className="section">
-      <div className="container-custom">
-        <h2 className="text-2xl font-bold mb-8 text-glow">&gt; git contributions</h2>
-        <div className="p-6 bg-surface rounded-none border border-primary-dark">
-          <div className="flex flex-col items-center space-y-6">
-            <div className="overflow-x-auto w-full">
-              <div className="flex justify-center min-w-max">
-                {renderContributionGrid()}
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-4 text-sm text-primary-light">
-              <span>Less</span>
-              <div className="flex space-x-1">
-                <div className="w-[10px] h-[10px] bg-primary-dark" />
-                <div className="w-[10px] h-[10px] bg-primary-medium" />
-                <div className="w-[10px] h-[10px] bg-primary-light" />
-                <div className="w-[10px] h-[10px] bg-primary" />
-              </div>
-              <span>More</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-primary">&gt; git contributions</h2>
+      {renderContributionGrid()}
     </div>
   );
 };
