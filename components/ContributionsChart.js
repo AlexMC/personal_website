@@ -5,6 +5,7 @@ const ContributionsChart = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState({ contributions: {}, totalContributions: 0 });
+  const [hoveredDay, setHoveredDay] = useState(null);
 
   useEffect(() => {
     const fetchContributions = async () => {
@@ -28,6 +29,16 @@ const ContributionsChart = () => {
     if (count <= 6) return 'bg-primary-medium opacity-70';
     if (count <= 9) return 'bg-primary-light opacity-80';
     return 'bg-primary';
+  };
+
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
 
   const renderContributionGrid = () => {
@@ -57,8 +68,16 @@ const ContributionsChart = () => {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <div className="text-primary-light">
-            {data.totalContributions.toLocaleString()} contributions in the last year
+          <div className="text-primary-light h-6">
+            {hoveredDay ? (
+              <>
+                <span className="font-medium">{hoveredDay.count} contributions</span>
+                {' '}on{' '}
+                <span className="font-medium">{formatDate(hoveredDay.date)}</span>
+              </>
+            ) : (
+              <>{data.totalContributions.toLocaleString()} contributions in the last year</>
+            )}
           </div>
           <div className="flex items-center space-x-2 text-xs">
             <span className="text-primary-light">Less</span>
@@ -80,7 +99,9 @@ const ContributionsChart = () => {
                   <div
                     key={`${weekIndex}-${dayIndex}`}
                     className={`contribution-cell ${day.color}`}
-                    title={`${day.date}: ${day.count} contributions`}
+                    onMouseEnter={() => setHoveredDay(day)}
+                    onMouseLeave={() => setHoveredDay(null)}
+                    title={`${formatDate(day.date)}: ${day.count} contributions`}
                   />
                 ))}
               </div>
