@@ -1,12 +1,9 @@
 import Layout from '../../components/Layout'
-import { posts } from '../../data/posts'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { getMarkdownData, getMarkdownPaths } from '../../lib/markdown'
+import path from 'path'
 
 export default function BlogPost({ post }) {
-  const router = useRouter()
-  const { slug } = router.query
-
   if (!post) return null
 
   return (
@@ -29,23 +26,23 @@ export default function BlogPost({ post }) {
           </div>
         </header>
 
-        <div className="prose prose-invert prose-primary max-w-none">
-          {post.content}
-        </div>
+        <div 
+          className="prose prose-invert prose-primary max-w-none"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
       </article>
     </Layout>
   )
 }
 
 export async function getStaticPaths() {
-  const paths = posts.map((post) => ({
-    params: { slug: post.slug },
-  }))
-
+  const paths = getMarkdownPaths('data/posts')
   return { paths, fallback: false }
 }
 
 export async function getStaticProps({ params }) {
-  const post = posts.find((post) => post.slug === params.slug)
+  const filePath = path.join(process.cwd(), 'data/posts', `${params.slug}.md`)
+  const post = await getMarkdownData(filePath)
+  
   return { props: { post } }
 }
