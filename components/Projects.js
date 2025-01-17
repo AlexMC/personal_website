@@ -12,9 +12,7 @@ const Projects = ({ projects, limit }) => {
       {displayProjects.map((project, index) => (
         <Link
           key={index}
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={`/work/${project.slug}`}
           className="block bg-surface p-6 border border-primary-dark hover:border-primary transition-all duration-300 group"
         >
           <div className="relative h-48 mb-6 bg-primary-dark/20">
@@ -38,6 +36,19 @@ const Projects = ({ projects, limit }) => {
               </span>
             ))}
           </div>
+          {project.link && (
+            <div className="mt-4">
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary-light hover:text-primary transition-colors"
+                onClick={(e) => e.stopPropagation()}
+              >
+                VIEW PROJECT &rarr;
+              </a>
+            </div>
+          )}
         </Link>
       ))}
     </div>
