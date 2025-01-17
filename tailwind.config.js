@@ -30,7 +30,72 @@ module.exports = {
           '50%': { opacity: 0 },
         },
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            color: '#00AB70', // primary-light
+            a: {
+              color: '#00FF9E', // primary
+              '&:hover': {
+                color: '#00AB70', // primary-light
+              },
+            },
+            strong: {
+              color: '#00FF9E', // primary
+            },
+            h1: {
+              color: '#00FF9E', // primary
+              fontWeight: '700',
+            },
+            h2: {
+              color: '#00FF9E', // primary
+              fontWeight: '600',
+            },
+            h3: {
+              color: '#00FF9E', // primary
+              fontWeight: '600',
+            },
+            h4: {
+              color: '#00FF9E', // primary
+              fontWeight: '600',
+            },
+            code: {
+              color: '#00AB70', // primary-light
+              backgroundColor: '#003B24', // primary-dark
+              fontFamily: 'JetBrains Mono, monospace',
+            },
+            pre: {
+              backgroundColor: '#003B24', // primary-dark
+              color: '#00AB70', // primary-light
+              fontFamily: 'JetBrains Mono, monospace',
+            },
+            'pre code': {
+              backgroundColor: 'transparent',
+              color: 'inherit',
+              fontFamily: 'inherit',
+            },
+            blockquote: {
+              borderLeftColor: '#00734A', // primary-medium
+              color: '#00AB70', // primary-light
+            },
+            'ul > li::marker': {
+              color: '#00FF9E', // primary
+            },
+            'ol > li::marker': {
+              color: '#00FF9E', // primary
+            },
+            hr: {
+              borderColor: '#003B24', // primary-dark
+            },
+            th: {
+              color: '#00FF9E', // primary
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }

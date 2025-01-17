@@ -5,7 +5,6 @@ excerpt: 'Deep dive into React hooks and how they can be used to optimize your a
 tags: ['React', 'Performance', 'JavaScript']
 ---
 
-# Building a rich link preview React Server Component
 
 React Server Components are a game-changing feature that allows us to write components that run exclusively on the server. This can significantly improve performance and reduce the JavaScript bundle size sent to the client.
 

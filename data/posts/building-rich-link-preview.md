@@ -5,7 +5,6 @@ excerpt: "Learn how to create a rich link preview component using React Server C
 tags: ["React", "Next.js", "Server Components", "Web APIs"]
 ---
 
-# Building a rich link preview React Server Component
 
 React Server Components are a game-changing feature that allows us to write components that run exclusively on the server. This can significantly improve performance and reduce the JavaScript bundle size sent to the client.
 

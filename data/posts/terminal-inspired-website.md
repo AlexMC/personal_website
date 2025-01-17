@@ -5,7 +5,6 @@ excerpt: "Learn how I built this website using Next.js, Tailwind CSS, and a term
 tags: ['Next.js', 'React', 'Tailwind CSS', 'Design']
 ---
 
-# Building a rich link preview React Server Component
 
 React Server Components are a game-changing feature that allows us to write components that run exclusively on the server. This can significantly improve performance and reduce the JavaScript bundle size sent to the client.
 

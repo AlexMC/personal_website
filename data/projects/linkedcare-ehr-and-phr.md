@@ -7,8 +7,6 @@ image: "/images/linkedcare.png"
 featured: true
 ---
 
-# HERE (tech tools)
-
 ## Overview
 
 As the CTPO at Metaphysic, I led the development of HERE, a suite of advanced AI tools designed to streamline and enhance our machine learning infrastructure.

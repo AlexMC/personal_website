@@ -5,7 +5,6 @@ excerpt: 'Explore the benefits of Static Site Generation and how to implement it
 tags: ['Next.js', 'SSG', 'Performance']
 ---
 
-# Building a rich link preview React Server Component
 
 React Server Components are a game-changing feature that allows us to write components that run exclusively on the server. This can significantly improve performance and reduce the JavaScript bundle size sent to the client.
 
