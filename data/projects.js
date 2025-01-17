@@ -1,16 +1,16 @@
 export const projects = [
   {
-    title: "Project 1",
-    description: "A brief description of your first project. Highlight the key features and technologies used.",
-    technologies: ["React", "Node.js", "MongoDB"],
+    title: "HERE (tech tools)",
+    description: "(As Metaphysic CTPO) A brief description of your first project. Highlight the key features and technologies used.",
+    technologies: ["GenAI", "Python", "ML Infra"],
     link: "https://github.com/yourusername/project1",
-    image: "/images/project1.png"
+    image: "/images/here.png"
   },
   {
-    title: "Project 2",
-    description: "Description of your second project. What problems did it solve? What did you learn?",
-    technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
+    title: "Trend Highlighter",
+    description: "(personal project) Description of your second project. What problems did it solve? What did you learn?",
+    technologies: ["Python", "TypeScript", "Tailwind"],
     link: "https://github.com/yourusername/project2",
-    image: "/images/project2.png"
+    image: "/images/trendhighlighter.png"
   }
 ];

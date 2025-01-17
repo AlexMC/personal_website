@@ -17,21 +17,20 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="space-y-24">
-        <section className="py-16">
-          <div className="space-y-6">
+      <div className="space-y-32">
+        <section>
             <p className="text-xl text-primary-light max-w-3xl">
-              Building fast apps that feel like a physical extension 
-              of your mind with considerate motion design for fluid 
-              interfaces.
-            </p>
-          </div>
+            I leverage technology to bridge the gap between market needs and business goals, driving maximum value creation and impactful solutions.
+           </p>
         </section>
 
-        <Projects />
+        <section>
+          <h2 className="text-2xl font-bold mb-12 text-primary">&gt; featured projects</h2>
+          <Projects />
+        </section>
         
-        <section className="space-y-8">
-          <h2 className="text-2xl font-bold text-primary">&gt; latest posts</h2>
+        <section>
+          <h2 className="text-2xl font-bold text-primary mb-8">&gt; latest posts</h2>
           <div className="space-y-6">
             {latestPosts.map((post, index) => (
               <article key={index} className="border-l-2 border-primary-dark pl-4 py-2 hover:border-primary transition-colors">
@@ -49,8 +48,13 @@ export default function Home() {
           </div>
         </section>
 
-        <ContributionsChart />
-        <Newsletter />
+        <section>
+          <ContributionsChart />
+        </section>
+
+        <section className="mb-16">
+          <Newsletter />
+        </section>
       </div>
     </Layout>
   )

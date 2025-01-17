@@ -13,12 +13,12 @@ export default function Work() {
           </p>
         </section>
 
-        <Projects />
-        
-        <section className="space-y-8">
-          <h2 className="text-2xl font-bold text-primary">&gt; contributions</h2>
-          <ContributionsChart />
+        <section>
+          <h2 className="text-2xl font-bold mb-12 text-primary">&gt; projects</h2>
+          <Projects />
         </section>
+
+        <ContributionsChart />
       </div>
     </Layout>
   )

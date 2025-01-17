@@ -46,7 +46,6 @@ export default function About() {
         </section>
 
         <section className="space-y-8">
-          <h2 className="text-2xl font-bold text-primary">&gt; connect</h2>
           <Newsletter />
         </section>
       </div>

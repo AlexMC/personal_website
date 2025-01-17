@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function Header() {
   return (
-    <header className="py-8">
+    <header className="pt-16">
       <div className="max-w-3xl mx-auto px-4">
         <div className="flex flex-col space-y-4">
           <h1 className="text-4xl font-bold text-glow">ALEXANDRE CARVALHO</h1>

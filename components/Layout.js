@@ -13,7 +13,7 @@ export default function Layout({ children }) {
 
       <Header />
 
-      <main className="max-w-3xl mx-auto px-4 py-8">
+      <main className="max-w-3xl mx-auto px-4 py-10">
         {children}
       </main>
 

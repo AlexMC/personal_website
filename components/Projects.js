@@ -7,9 +7,7 @@ const Projects = () => {
   }
 
   return (
-    <div className="section">
       <div className="container-custom">
-        <h2 className="text-2xl font-bold mb-12 text-primary">&gt; featured projects</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
             <a
@@ -45,7 +43,6 @@ const Projects = () => {
           ))}
         </div>
       </div>
-    </div>
   );
 };
 
