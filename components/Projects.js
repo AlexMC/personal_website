@@ -15,14 +15,14 @@ const Projects = ({ projects, limit }) => {
           href={project.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="block bg-surface p-6 border border-primary-dark hover:border-primary transition-all duration-300"
+          className="block bg-surface p-6 border border-primary-dark hover:border-primary transition-all duration-300 group"
         >
           <div className="relative h-48 mb-6 bg-primary-dark/20">
             {project.image && (
               <img
                 src={project.image}
                 alt={project.title}
-                className="w-full h-full object-cover mix-blend-luminosity opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                className="w-full h-full object-cover mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-300"
               />
             )}
           </div>
