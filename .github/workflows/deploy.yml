@@ -29,9 +29,14 @@ jobs:
           NEXT_PUBLIC_GITHUB_TOKEN: ${{ secrets.NEXT_PUBLIC_GITHUB_TOKEN }}
           NEXT_PUBLIC_GITHUB_USERNAME: ${{ secrets.NEXT_PUBLIC_GITHUB_USERNAME }}
           MAILERLITE_API_KEY: ${{ secrets.MAILERLITE_API_KEY }}
+          NODE_ENV: production
+
+      - name: Touch .nojekyll
+        run: touch out/.nojekyll
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: out
           branch: gh-pages
+          clean: true

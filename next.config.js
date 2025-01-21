@@ -3,6 +3,7 @@ const nextConfig = {
   ...(process.env.NODE_ENV === 'production' ? {
     output: 'export',
     basePath: '/personal_website',
+    assetPrefix: '/personal_website/',
     images: {
       unoptimized: true,
     },
