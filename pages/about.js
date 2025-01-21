@@ -3,10 +3,10 @@ import Newsletter from '../components/Newsletter'
 
 export default function About() {
   const skills = [
-    { category: "Languages", items: ["JavaScript", "TypeScript", "Python", "Solidity"] },
-    { category: "Frontend", items: ["React", "Next.js", "TailwindCSS", "GraphQL"] },
-    { category: "Backend", items: ["Node.js", "Express", "PostgreSQL", "MongoDB"] },
-    { category: "Tools", items: ["Git", "Docker", "AWS", "Web3"] }
+    { category: "Technology", items: ["Architecture", "Infrastructure", "Coordination", "Recruitment"] },
+    { category: "Product", items: ["Management", "Business Value Creation", "Stakeholder Management"] },
+    { category: "AI", items: ["Generative AI", "Research Management", "Tooling"] },
+    { category: "Web3", items: ["Smart Contracts", "Node Management"] }
   ]
 
   return (

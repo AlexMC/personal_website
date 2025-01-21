@@ -24,6 +24,15 @@ export default function BlogPost({ post }) {
               ))}
             </div>
           </div>
+          {post.image && (
+            <div className="relative h-64 w-full">
+              <img 
+                src={post.image} 
+                alt={post.title}
+                className="w-full h-full object-cover rounded-lg border border-primary-dark"
+              />
+            </div>
+          )}
         </header>
 
         <div 

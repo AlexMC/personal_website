@@ -3,6 +3,7 @@ title: "Are developers missing the mark on using AI?"
 date: "2025-01-20"
 excerpt: "When used correctly, AI can augment a developer's capacity by orders of magnitude. But here's the problem: many developers aren’t using AI correctly."
 tags: ["React", "Next.js", "Server Components", "Web APIs"]
+image: "/images/developers_ai.jpeg"
 ---
 
 
