@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import axios from 'axios';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 const Newsletter = () => {
   const [email, setEmail] = useState('');
@@ -11,42 +14,12 @@ const Newsletter = () => {
     setError('');
 
     try {
-      const response = await fetch(
-        process.env.NODE_ENV === 'production'
-          ? 'https://connect.mailerlite.com/api/subscribers'
-          : '/api/subscribe',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(process.env.NODE_ENV === 'production' && {
-              'Accept': 'application/json',
-              'Authorization': `Bearer ${process.env.NEXT_PUBLIC_MAILERLITE_API_KEY}`,
-            }),
-          },
-          body: JSON.stringify(
-            process.env.NODE_ENV === 'production'
-              ? {
-                  email,
-                  groups: [],
-                  status: 'active',
-                }
-              : { email }
-          ),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong');
-      }
-
+      const response = await axios.post(`${API_URL}/api/website/newsletter/subscribe`, { email });
       setStatus('success');
       setEmail('');
     } catch (err) {
       setStatus('error');
-      setError(err.message);
+      setError(err.response?.data?.detail || 'Failed to subscribe. Please try again.');
     }
   };
 
