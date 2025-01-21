@@ -2,84 +2,68 @@ import { useState } from 'react';
 
 const Newsletter = () => {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('idle');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus('sending');
+    setStatus('loading');
+    setError('');
 
     try {
-      // Replace with your newsletter service endpoint
       const response = await fetch('/api/subscribe', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ email }),
       });
 
       const data = await response.json();
 
-      if (response.ok) {
-        setStatus('success');
-        setEmail('');
-      } else {
+      if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
       }
-    } catch (error) {
+
+      setStatus('success');
+      setEmail('');
+    } catch (err) {
       setStatus('error');
-      console.error('Newsletter subscription error:', error);
+      setError(err.message);
     }
   };
 
   return (
-    <div className="section">
-      <div className="container-custom max-w-2xl">
-        <div className="p-6 bg-surface rounded-none border border-primary-dark">
-          <h2 className="text-2xl font-bold mb-4 text-glow">&gt; subscribe</h2>
-          <p className="text-primary-light mb-6">
-            Get notified about new blog posts and projects. No spam, unsubscribe at any time.
-          </p>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your@email.com"
-                className="terminal-input"
-                required
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={status === 'sending'}
-              className="btn-primary w-full"
-            >
-              {status === 'sending' ? (
-                <span className="loading-cursor">Subscribing_</span>
-              ) : (
-                'Subscribe'
-              )}
-            </button>
-
-            {status === 'success' && (
-              <p className="text-primary text-sm">
-                <span className="loading-cursor">Thanks for subscribing_</span>
-              </p>
-            )}
-            {status === 'error' && (
-              <p className="text-primary text-sm">
-                <span className="loading-cursor">Error: Please try again_</span>
-              </p>
-            )}
-          </form>
+    <div className="border border-primary-dark p-6 bg-surface">
+      <h3 className="text-xl font-bold text-primary mb-4">Subscribe to my newsletter</h3>
+      <p className="text-primary-light mb-4">
+        Get updates on my latest projects, blog posts, and tech insights.
+      </p>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            required
+            className="w-full bg-background border border-primary-dark p-2 text-primary-light focus:border-primary focus:outline-none transition-colors"
+          />
         </div>
-      </div>
+        <button
+          type="submit"
+          disabled={status === 'loading'}
+          className="w-full bg-primary-dark text-primary border border-primary-medium hover:bg-primary hover:text-background px-4 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
+        </button>
+        {status === 'success' && (
+          <p className="text-primary text-sm">Thanks for subscribing!</p>
+        )}
+        {status === 'error' && (
+          <p className="text-red-500 text-sm">{error}</p>
+        )}
+      </form>
     </div>
   );
 };

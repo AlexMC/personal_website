@@ -10,27 +10,31 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Replace this with your newsletter service integration
-    // Example using a mailing service API:
-    /*
-    const response = await fetch('https://api.mailingservice.com/v1/subscribers', {
+    const response = await fetch('https://connect.mailerlite.com/api/subscribers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.MAILING_SERVICE_API_KEY}`,
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${process.env.MAILERLITE_API_KEY}`,
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({
+        email,
+        groups: [], // Optional: Add group IDs if you want to add subscriber to specific groups
+        status: 'active',
+      }),
     });
-    
-    if (!response.ok) {
-      throw new Error('Subscription failed');
-    }
-    */
 
-    // For now, just simulate a successful subscription
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to subscribe');
+    }
+
     return res.status(200).json({ message: 'Successfully subscribed!' });
   } catch (error) {
     console.error('Newsletter subscription error:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ 
+      message: error.message || 'Error subscribing to newsletter' 
+    });
   }
 }

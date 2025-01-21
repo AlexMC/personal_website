@@ -9,7 +9,7 @@ export default function Footer() {
           <a href="https://twitter.com/alexmc" target="_blank" rel="noopener noreferrer" className="text-primary-light hover:text-primary transition-colors">
             TWITTER
           </a>
-          <a href="https://linkedin.com/in/alexmc" target="_blank" rel="noopener noreferrer" className="text-primary-light hover:text-primary transition-colors">
+          <a href="https://www.linkedin.com/in/alexandremcarvalho/" target="_blank" rel="noopener noreferrer" className="text-primary-light hover:text-primary transition-colors">
             LINKEDIN
           </a>
         </div>
