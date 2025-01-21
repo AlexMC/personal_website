@@ -11,13 +11,30 @@ const Newsletter = () => {
     setError('');
 
     try {
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
+      const response = await fetch(
+        process.env.NODE_ENV === 'production'
+          ? 'https://connect.mailerlite.com/api/subscribers'
+          : '/api/subscribe',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(process.env.NODE_ENV === 'production' && {
+              'Accept': 'application/json',
+              'Authorization': `Bearer ${process.env.NEXT_PUBLIC_MAILERLITE_API_KEY}`,
+            }),
+          },
+          body: JSON.stringify(
+            process.env.NODE_ENV === 'production'
+              ? {
+                  email,
+                  groups: [],
+                  status: 'active',
+                }
+              : { email }
+          ),
+        }
+      );
 
       const data = await response.json();
 
