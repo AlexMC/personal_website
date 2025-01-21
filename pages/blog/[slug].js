@@ -2,6 +2,7 @@ import Layout from '../../components/Layout'
 import Link from 'next/link'
 import { getMarkdownData, getMarkdownPaths } from '../../lib/markdown'
 import path from 'path'
+import { getImagePath } from '../../lib/utils'
 
 export default function BlogPost({ post }) {
   if (!post) return null
@@ -27,7 +28,7 @@ export default function BlogPost({ post }) {
           {post.image && (
             <div className="relative h-64 w-full">
               <img 
-                src={post.image} 
+                src={getImagePath(post.image)} 
                 alt={post.title}
                 className="w-full h-full object-cover rounded-lg border border-primary-dark"
               />

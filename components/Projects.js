@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getImagePath } from '../lib/utils';
 
 const Projects = ({ projects, limit }) => {
   const displayProjects = limit ? projects.slice(0, limit) : projects;
@@ -15,9 +16,9 @@ const Projects = ({ projects, limit }) => {
             <div className="relative h-48 mb-6 bg-primary-dark/20">
               {project.image && (
                 <img
-                  src={project.image}
+                  src={getImagePath(project.image)}
                   alt={project.title}
-                  className="w-full h-full object-cover mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-300"
+                  className="w-full h-48 object-cover mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-300"
                 />
               )}
             </div>

@@ -2,6 +2,7 @@ import Layout from '../../components/Layout'
 import Link from 'next/link'
 import { getMarkdownData, getMarkdownPaths } from '../../lib/markdown'
 import path from 'path'
+import { getImagePath } from '../../lib/utils';
 
 export default function Project({ project }) {
   if (!project) return null
@@ -25,7 +26,7 @@ export default function Project({ project }) {
           </div>
           {project.image && (
             <img 
-              src={project.image} 
+              src={getImagePath(project.image)} 
               alt={project.title}
               className="w-full h-64 object-cover rounded-lg border border-primary-dark"
             />
