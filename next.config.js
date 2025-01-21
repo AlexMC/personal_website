@@ -1,17 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  ...(process.env.NODE_ENV === 'production' ? {
-    output: 'export',
-    basePath: '/personal_website',
-    assetPrefix: '/personal_website/',
-    images: {
-      unoptimized: true,
-    },
-  } : {
-    images: {
-      domains: ['github.com', 'raw.githubusercontent.com'],
-    },
-  })
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
+  basePath: '',
+  assetPrefix: '',
 }
 
 module.exports = nextConfig
