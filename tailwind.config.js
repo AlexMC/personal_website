@@ -23,12 +23,17 @@ module.exports = {
       },
       animation: {
         'blink': 'blink 1s infinite',
+        'slideUp': 'slideUp 0.3s ease-out forwards',
       },
       keyframes: {
         blink: {
           '0%, 100%': { opacity: 1 },
           '50%': { opacity: 0 },
         },
+        slideUp: {
+          '0%': { transform: 'translateY(100%)' },
+          '100%': { transform: 'translateY(0)' },
+        }
       },
       typography: {
         DEFAULT: {
