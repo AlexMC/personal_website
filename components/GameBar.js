@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { useLocalStorage } from '../lib/useLocalStorage';
 import { useKonamiCode } from '../lib/useKonamiCode';
@@ -8,40 +8,71 @@ export default function GameBar() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isVisible, setIsVisible] = useLocalStorage('gameBarVisible', false);
+  const [cachedGames, setCachedGames] = useLocalStorage('cachedGames', { data: [], timestamp: 0 });
   const konamiDetected = useKonamiCode();
   const [showEffect, setShowEffect] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const gamesContainerRef = useRef(null);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  
+  // Cache expiration time in milliseconds (30 minutes)
+  const CACHE_EXPIRATION = 30 * 60 * 1000;
+
+  const fetchGames = useCallback(async (forceRefresh = false) => {
+    try {
+      // Check if we have cached data and it's not expired
+      const now = Date.now();
+      if (!forceRefresh && 
+          cachedGames.data.length > 0 && 
+          now - cachedGames.timestamp < CACHE_EXPIRATION) {
+        console.log('Using cached game data');
+        setGames(cachedGames.data);
+        setLoading(false);
+        return;
+      }
+      
+      console.log('Fetching fresh game data');
+      const response = await fetch(`${API_URL}/api/website/games`);
+      
+      if (!response.ok) {
+        throw new Error(`Error fetching games: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      setGames(data);
+      
+      // Update the cache with new data and timestamp
+      setCachedGames({
+        data,
+        timestamp: now
+      });
+      
+      setLoading(false);
+    } catch (err) {
+      console.error('Failed to fetch games:', err);
+      setError(err.message);
+      setLoading(false);
+      
+      // If fetch fails, use cached data if available (even if expired)
+      if (cachedGames.data.length > 0) {
+        console.log('Fetch failed, using cached data as fallback');
+        setGames(cachedGames.data);
+      }
+    }
+  }, [API_URL, cachedGames, setCachedGames]);
 
   useEffect(() => {
-    const fetchGames = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/website/games`);
-        
-        if (!response.ok) {
-          throw new Error(`Error fetching games: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        setGames(data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Failed to fetch games:', err);
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
     fetchGames();
     
-    // Refresh data every 5 minutes
-    const intervalId = setInterval(fetchGames, 5 * 60 * 1000);
+    // Refresh data periodically (every 30 minutes)
+    const intervalId = setInterval(() => {
+      fetchGames(true); // Force refresh on interval
+    }, CACHE_EXPIRATION);
     
     // Clean up interval on component unmount
     return () => clearInterval(intervalId);
-  }, [API_URL]);
+  }, [fetchGames]);
 
   // Toggle visibility when Konami code is detected
   useEffect(() => {
@@ -153,6 +184,7 @@ export default function GameBar() {
                             fill
                             style={{ objectFit: 'contain' }}
                             className="rounded-md"
+                            priority={index === 0} // Prioritize loading the first visible image
                             onError={(e) => {
                               // Replace with fallback on error
                               e.target.style.display = 'none';
