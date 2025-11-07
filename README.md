@@ -26,6 +26,7 @@ A modern, statically-generated personal website built with Next.js, featuring a 
 ### Utilities
 - **axios** - HTTP client for API requests
 - **unist-util-visit** - AST traversal for custom markdown plugins
+- **@atproto/api** - AT Protocol (Bluesky) client for decentralized comments
 
 ## Features
 
@@ -35,6 +36,11 @@ A modern, statically-generated personal website built with Next.js, featuring a 
 - Tag support
 - Automatic post listing with dates
 - Featured posts on homepage
+- **Decentralized comments via Bluesky/AT Protocol** (see [BLUESKY_COMMENTS.md](BLUESKY_COMMENTS.md))
+  - No database or user management required
+  - Comments pulled from Bluesky post replies
+  - Rich content support (images, links, threaded conversations)
+  - Fully automated CI/CD workflow for sharing posts
 
 ### 2. Project Showcase
 - Project pages with markdown content
@@ -95,9 +101,17 @@ Create a `.env.local` file in the root directory:
 # GitHub configuration (optional - for contributions chart)
 NEXT_PUBLIC_GITHUB_TOKEN=your_github_personal_access_token
 NEXT_PUBLIC_GITHUB_USERNAME=your_github_username
+
+# Bluesky configuration (optional - for auto-sharing blog posts)
+# Get an app password from: https://bsky.app/settings/app-passwords
+BSKY_HANDLE=your_username.bsky.social
+BSKY_APP_PASSWORD=your-app-password-here
+SITE_URL=https://yourdomain.com
 ```
 
-**Note:** The GitHub token is optional. If not provided, the contributions chart will use fallback data or not display.
+**Note:**
+- The GitHub token is optional. If not provided, the contributions chart will use fallback data or not display.
+- Bluesky credentials are optional. If not provided, you can still manually add comment metadata to posts. See [BLUESKY_COMMENTS.md](BLUESKY_COMMENTS.md) for details.
 
 4. Run the development server:
 ```bash
@@ -112,6 +126,7 @@ npm run dev
 - `npm run build` - Build static site for production
 - `npm start` - Run production build locally
 - `npm run lint` - Run Next.js linter
+- `npm run share-to-bluesky` - Manually share posts to Bluesky (requires BSKY_ env vars)
 
 ## Content Management
 
@@ -129,6 +144,10 @@ title: 'Your Post Title'
 date: '2025-01-15'
 excerpt: 'A brief summary of your post that appears in listings'
 tags: ['Tag1', 'Tag2', 'Tag3']
+# Optional: Bluesky comments (will be auto-added by CI/CD if configured)
+# bsky:
+#   uri: 'at://did:plc:YOUR_DID/app.bsky.feed.post/POST_ID'
+#   author: 'yourusername.bsky.social'
 ---
 
 Your blog post content goes here. You can use all standard markdown features:
@@ -167,6 +186,7 @@ function example() {
 - Images should be placed in `/public/images/`
 - Reference images with `/images/filename.png` (no /public prefix)
 - Posts are sorted by date automatically (newest first)
+- **Bluesky Comments:** If configured, posts are automatically shared to Bluesky when pushed to `main`, and the `bsky` metadata is added automatically. See [BLUESKY_COMMENTS.md](BLUESKY_COMMENTS.md) for setup instructions.
 
 ### Adding a New Project
 
@@ -234,10 +254,23 @@ This site uses GitHub Actions for automated deployment to GitHub Pages.
    - `MAILERLITE_API_KEY` - MailerLite API key for newsletter
    - `NEXT_PUBLIC_API_URL` - External API endpoint URL
 
+   Optional secrets (for Bluesky comments):
+   - `BSKY_HANDLE` - Your Bluesky handle (e.g., username.bsky.social)
+   - `BSKY_APP_PASSWORD` - Bluesky app password (from https://bsky.app/settings/app-passwords)
+
+   Optional variables:
+   - `SITE_URL` - Your website URL (e.g., https://yourdomain.com)
+
    **Creating a GitHub Personal Access Token:**
    - Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
    - Generate new token with `read:user` scope
    - Copy the token and add it as `CONTRIB_TOKEN` secret
+
+   **Creating a Bluesky App Password:**
+   - Go to Bluesky Settings → App Passwords
+   - Create a new app password
+   - Copy the password immediately (you won't see it again)
+   - Add it as `BSKY_APP_PASSWORD` secret
 
 3. **Custom Domain (Optional):**
 
@@ -330,9 +363,13 @@ Before pushing to production:
 personal_website/
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml          # GitHub Actions CI/CD configuration
+│       ├── deploy.yml          # GitHub Actions deployment configuration
+│       └── auto-share-bluesky.yml # Auto-share posts to Bluesky workflow
 ├── components/                  # React components
 │   ├── About.js                # About page content
+│   ├── BlueskyComments.js      # Bluesky comment thread display
+│   ├── BlueskyEmbed.js         # Bluesky rich content embeds
+│   ├── BlueskyReply.js         # Individual comment with nesting
 │   ├── ContributionsChart.js   # GitHub contributions heatmap
 │   ├── ErrorBoundary.js        # Error handling wrapper
 │   ├── Footer.js               # Footer with social links
@@ -376,11 +413,14 @@ personal_website/
 │   ├── favicon.ico             # Site favicon
 │   ├── manifest.json           # PWA manifest
 │   └── browserconfig.xml       # Windows tile configuration
+├── scripts/                     # Automation scripts
+│   └── auto-share-to-bluesky.js # Auto-share blog posts to Bluesky
 ├── styles/                      # Global styles
 │   ├── globals.css             # Base styles and Tailwind imports
 │   └── scrollbar-hide.css      # Custom scrollbar utilities
 ├── .env.example                # Environment variables template
 ├── .gitignore                  # Git ignore rules
+├── BLUESKY_COMMENTS.md         # Bluesky comments setup guide
 ├── next.config.js              # Next.js configuration
 ├── package.json                # Dependencies and scripts
 ├── postcss.config.js           # PostCSS configuration
@@ -395,6 +435,7 @@ personal_website/
 - **lib/** - Utility functions, API clients, and custom React hooks
 - **pages/** - Next.js file-based routing (each file = a route)
 - **public/** - Static assets served directly (images, favicons, etc.)
+- **scripts/** - Automation scripts (Bluesky auto-sharing, etc.)
 - **styles/** - Global CSS and Tailwind configuration
 
 ### Route Structure
@@ -464,6 +505,44 @@ This site is optimized for performance:
 - **Fast Load Times** - Optimized bundles and assets
 - **Smart Caching** - 30-minute cache for API data
 - **Minimal JavaScript** - Only what's necessary
+
+## Bluesky Comments Integration
+
+This site features a decentralized comment system powered by Bluesky's AT Protocol, eliminating the need for a traditional comment database.
+
+### How It Works
+
+- Blog posts are shared to Bluesky when pushed to the `main` branch
+- Replies to the Bluesky post become comments on the blog
+- Comments are fetched client-side via the AT Protocol API
+- No user management, databases, or backend infrastructure needed
+
+### Features
+
+- ✅ **Fully automated** - CI/CD workflow shares posts and adds metadata
+- ✅ **Rich content** - Images, links, and threaded conversations
+- ✅ **Real identities** - Users comment with their Bluesky profiles
+- ✅ **No tracking** - Privacy-focused, no analytics
+- ✅ **Decentralized** - Comments live on Bluesky's network
+- ✅ **Progressive enhancement** - Works without JavaScript
+
+### Setup
+
+See [BLUESKY_COMMENTS.md](BLUESKY_COMMENTS.md) for detailed setup instructions.
+
+Quick setup:
+1. Get Bluesky app password from https://bsky.app/settings/app-passwords
+2. Add `BSKY_HANDLE` and `BSKY_APP_PASSWORD` to GitHub Secrets
+3. Push a new blog post - it's automatically shared and configured!
+
+### Manual Sharing
+
+To manually share posts to Bluesky:
+
+```bash
+# Ensure BSKY_HANDLE, BSKY_APP_PASSWORD, and SITE_URL are set in .env
+npm run share-to-bluesky
+```
 
 ## License
 
