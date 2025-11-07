@@ -10,6 +10,9 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 
+// Load environment variables from .env.local for local development
+require('dotenv').config({ path: path.join(__dirname, '..', '.env.local') });
+
 // Fetch Trakt data from the API
 async function fetchTraktData() {
 
