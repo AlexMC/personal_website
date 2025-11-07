@@ -1,7 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import TraktStats from './TraktStats';
 
 export default function TraktModal({ isOpen, onClose }) {
+  const [traktData, setTraktData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Load Trakt data from the pre-generated JSON file
+  useEffect(() => {
+    if (isOpen && !traktData) {
+      fetch('/trakt-data.json')
+        .then(res => res.json())
+        .then(data => {
+          setTraktData(data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error('Failed to load Trakt data:', err);
+          setTraktData({ error: 'Failed to load Trakt data' });
+          setLoading(false);
+        });
+    }
+  }, [isOpen, traktData]);
+
   // Close on ESC key
   useEffect(() => {
     const handleEsc = (e) => {
@@ -45,7 +65,14 @@ export default function TraktModal({ isOpen, onClose }) {
 
         {/* Content */}
         <div className="p-8">
-          <TraktStats />
+          {loading ? (
+            <div className="text-center py-20">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+              <p className="mt-4 text-primary-light">Loading your Trakt data...</p>
+            </div>
+          ) : (
+            <TraktStats traktData={traktData} />
+          )}
         </div>
       </div>
     </div>

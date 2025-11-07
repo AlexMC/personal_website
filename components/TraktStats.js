@@ -1,61 +1,22 @@
 import { useState, useEffect } from 'react';
 import { getRelativeTime } from '../lib/trakt';
 
-export default function TraktStats() {
-  const [history, setHistory] = useState({ episodes: [], movies: [] });
-  const [stats, setStats] = useState(null);
-  const [calendar, setCalendar] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function TraktStats({ traktData }) {
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    async function fetchTraktData() {
-      try {
-        setLoading(true);
+  // Use pre-fetched data from build time
+  const history = traktData?.history || { episodes: [], movies: [] };
+  const stats = traktData?.stats || null;
+  const calendar = traktData?.calendar || [];
+  const buildTime = traktData?.buildTime;
 
-        // Fetch all data in parallel
-        const [episodesRes, moviesRes, statsRes, calendarRes] = await Promise.all([
-          fetch('/api/trakt/history?type=episodes&limit=5'),
-          fetch('/api/trakt/history?type=movies&limit=5'),
-          fetch('/api/trakt/stats'),
-          fetch('/api/trakt/calendar?days=14'),
-        ]);
-
-        const [episodes, movies, statsData, calendarData] = await Promise.all([
-          episodesRes.json(),
-          moviesRes.json(),
-          statsRes.json(),
-          calendarRes.json(),
-        ]);
-
-        setHistory({ episodes, movies });
-        setStats(statsData);
-        setCalendar(calendarData);
-        setError(null);
-      } catch (err) {
-        console.error('Failed to fetch Trakt data:', err);
-        setError('Failed to load Trakt data. Make sure your API credentials are configured.');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchTraktData();
-  }, []);
-
-  if (loading) {
+  if (traktData?.error) {
     return (
       <div className="text-center py-20">
-        <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        <p className="mt-4 text-primary-light">Loading your Trakt data...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="text-center py-20">
-        <p className="text-red-500">{error}</p>
+        <p className="text-red-500">{traktData.error}</p>
+        <p className="text-primary-light text-sm mt-2">
+          Make sure TRAKT_* environment variables are configured in your deployment settings.
+        </p>
       </div>
     );
   }
@@ -68,6 +29,11 @@ export default function TraktStats() {
           🎬 Secret Trakt Stats 🎬
         </h1>
         <p className="text-primary-light">You found the hidden easter egg!</p>
+        {buildTime && (
+          <p className="text-primary-light text-sm mt-2">
+            Last updated: {new Date(buildTime).toLocaleString()}
+          </p>
+        )}
       </div>
 
       {/* Overall Stats */}
