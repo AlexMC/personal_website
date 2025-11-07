@@ -1,6 +1,6 @@
 # Personal Website
 
-A modern, statically-generated personal website built with Next.js, featuring a blog, project showcase, GitHub contributions integration, and a hidden Konami code easter egg.
+A modern, statically-generated personal website built with Next.js, featuring a blog, project showcase, GitHub contributions integration, and two hidden easter eggs: a Konami code game bar and a Matrix code Trakt TV integration.
 
 **Live Site:** [alexcarvalho.me](https://alexcarvalho.me)
 
@@ -62,7 +62,20 @@ Features:
 - 30-minute cache using localStorage
 - Can be closed with ESC key
 
-### 6. Responsive Design
+### 6. Matrix Code Easter Egg (Trakt TV Integration)
+Hidden stats modal that displays your TV and movie watching activity! Type **"there is no spoon"** anywhere on the site to activate.
+
+Features:
+- **Recently Watched**: Last 5 episodes and movies you've watched
+- **Overall Statistics**: Total movies, episodes, shows watched with watch time
+- **Upcoming Episodes**: Next 14 days of episodes from shows you're watching
+- **Beautiful UI**: Animated modal with Matrix-themed activation
+- **Real-time Data**: Fetches live data from Trakt API
+- **ESC to Close**: Press ESC or click backdrop to close
+
+Powered by the [Trakt API](https://trakt.tv/) - tracks your TV shows and movies.
+
+### 7. Responsive Design
 - Mobile-first approach
 - Terminal/hacker aesthetic
 - Custom animations (blink, slideUp)
@@ -95,9 +108,18 @@ Create a `.env.local` file in the root directory:
 # GitHub configuration (optional - for contributions chart)
 NEXT_PUBLIC_GITHUB_TOKEN=your_github_personal_access_token
 NEXT_PUBLIC_GITHUB_USERNAME=your_github_username
+
+# Trakt API configuration (optional - for Matrix code easter egg)
+# Create an app at: https://trakt.tv/oauth/applications/new
+TRAKT_CLIENT_ID=your_trakt_client_id
+TRAKT_CLIENT_SECRET=your_trakt_client_secret
+TRAKT_ACCESS_TOKEN=your_trakt_access_token
+TRAKT_USERNAME=your_trakt_username
 ```
 
-**Note:** The GitHub token is optional. If not provided, the contributions chart will use fallback data or not display.
+**Note:**
+- The GitHub token is optional. If not provided, the contributions chart will use fallback data or not display.
+- The Trakt API credentials are optional. If not provided, the Matrix code easter egg will still activate but will show an error message instead of your stats.
 
 4. Run the development server:
 ```bash
@@ -112,6 +134,49 @@ npm run dev
 - `npm run build` - Build static site for production
 - `npm start` - Run production build locally
 - `npm run lint` - Run Next.js linter
+
+### Setting Up Trakt API (Optional)
+
+To enable the Matrix code easter egg with your personal Trakt data:
+
+1. **Create a Trakt Account:**
+   - Sign up at [trakt.tv](https://trakt.tv/)
+   - Install the Trakt browser extension or mobile app to start tracking your watching
+
+2. **Create a Trakt API Application:**
+   - Go to [https://trakt.tv/oauth/applications/new](https://trakt.tv/oauth/applications/new)
+   - Fill in the application details:
+     - Name: Your Website Name
+     - Redirect URI: `http://localhost:3000` (or your domain)
+     - Permissions: Check what you need (typically just read access)
+   - Click "Save App"
+
+3. **Get Your Credentials:**
+   - After creating the app, you'll see your `Client ID` and `Client Secret`
+   - Copy these to your `.env.local` file
+
+4. **Get an Access Token:**
+   - You need to complete OAuth flow to get an access token
+   - Use a tool like [Postman](https://www.postman.com/) or follow [Trakt's OAuth documentation](https://trakt.docs.apiary.io/#reference/authentication-oauth)
+   - Alternatively, use this quick method:
+     ```bash
+     # Install trakt-cli (if available) or use curl to get a token
+     # See Trakt documentation for detailed OAuth flow
+     ```
+   - Copy the access token to your `.env.local` file
+
+5. **Add to Environment Variables:**
+   ```bash
+   TRAKT_CLIENT_ID=your_client_id_here
+   TRAKT_CLIENT_SECRET=your_client_secret_here
+   TRAKT_ACCESS_TOKEN=your_access_token_here
+   TRAKT_USERNAME=your_trakt_username
+   ```
+
+6. **Test the Integration:**
+   - Start your dev server: `npm run dev`
+   - Type "there is no spoon" anywhere on the site
+   - You should see your watching stats appear!
 
 ## Content Management
 
@@ -234,6 +299,12 @@ This site uses GitHub Actions for automated deployment to GitHub Pages.
    - `MAILERLITE_API_KEY` - MailerLite API key for newsletter
    - `NEXT_PUBLIC_API_URL` - External API endpoint URL
 
+   Optional secrets (for Matrix code easter egg):
+   - `TRAKT_CLIENT_ID` - Trakt API client ID
+   - `TRAKT_CLIENT_SECRET` - Trakt API client secret
+   - `TRAKT_ACCESS_TOKEN` - Trakt API access token
+   - `TRAKT_USERNAME` - Your Trakt username
+
    **Creating a GitHub Personal Access Token:**
    - Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
    - Generate new token with `read:user` scope
@@ -285,10 +356,17 @@ npm run build
 
 The following environment variables are injected during the build process:
 
+**Required:**
 - `CONTRIB_TOKEN` - GitHub contributions API authentication
 - `CONTRIB_USERNAME` - Your GitHub username for contributions chart
 - `MAILERLITE_API_KEY` - Newsletter service authentication
 - `NEXT_PUBLIC_API_URL` - Base URL for external API calls
+
+**Optional (Trakt Integration):**
+- `TRAKT_CLIENT_ID` - Trakt API client ID
+- `TRAKT_CLIENT_SECRET` - Trakt API client secret
+- `TRAKT_ACCESS_TOKEN` - Trakt API access token
+- `TRAKT_USERNAME` - Your Trakt username
 
 **Note:** Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser and embedded in the static build.
 
@@ -342,7 +420,9 @@ personal_website/
 │   ├── Meta.js                 # SEO meta tags
 │   ├── Newsletter.js           # Email subscription form
 │   ├── Posts.js                # Blog post listing
-│   └── Projects.js             # Project cards
+│   ├── Projects.js             # Project cards
+│   ├── TraktModal.js           # Matrix code easter egg modal
+│   └── TraktStats.js           # Trakt TV statistics display
 ├── data/                        # Content storage (markdown files)
 │   ├── posts/                  # Blog posts
 │   │   ├── my-first-post.md
@@ -354,18 +434,24 @@ personal_website/
 │   ├── github.js               # GitHub API client
 │   ├── markdown.js             # Markdown processing pipeline
 │   ├── remarkImagePath.js      # Custom remark plugin for images
+│   ├── trakt.js                # Trakt API client and utilities
 │   ├── useKonamiCode.js        # Konami code detection hook
 │   ├── useLocalStorage.js      # localStorage persistence hook
+│   ├── useMatrixCode.js        # Matrix phrase detection hook
 │   └── utils.js                # Path utilities
 ├── pages/                       # Next.js pages (routes)
 │   ├── api/
-│   │   └── github/
-│   │       └── contributions.js # GitHub GraphQL API endpoint
+│   │   ├── github/
+│   │   │   └── contributions.js # GitHub GraphQL API endpoint
+│   │   └── trakt/
+│   │       ├── calendar.js      # Trakt calendar endpoint
+│   │       ├── history.js       # Trakt watch history endpoint
+│   │       └── stats.js         # Trakt statistics endpoint
 │   ├── blog/
 │   │   └── [slug].js           # Dynamic blog post pages
 │   ├── work/
 │   │   └── [slug].js           # Dynamic project pages
-│   ├── _app.js                 # App wrapper
+│   ├── _app.js                 # App wrapper with easter eggs
 │   ├── about.js                # About page
 │   ├── blog.js                 # Blog listing page
 │   ├── index.js                # Homepage
@@ -406,6 +492,9 @@ personal_website/
 - `/work/[slug]` - Individual project (work/[slug].js)
 - `/about` - About page (about.js)
 - `/api/github/contributions` - GitHub API endpoint (api/github/contributions.js)
+- `/api/trakt/history` - Trakt watch history endpoint (api/trakt/history.js)
+- `/api/trakt/stats` - Trakt statistics endpoint (api/trakt/stats.js)
+- `/api/trakt/calendar` - Trakt calendar endpoint (api/trakt/calendar.js)
 
 ## Customization
 
@@ -449,11 +538,17 @@ const navigation = [
 
 Edit `/components/Footer.js` to update social media links.
 
-### Konami Code
+### Easter Eggs
 
-To disable or modify the Konami code easter egg:
+**Konami Code (Game Bar):**
+To disable or modify:
 - Remove `<GameBar />` from `/components/Layout.js`
 - Or modify the code sequence in `/lib/useKonamiCode.js`
+
+**Matrix Code (Trakt Stats):**
+To disable or modify:
+- Remove the `<TraktModal />` and related hooks from `/pages/_app.js`
+- Or change the secret phrase in `/lib/useMatrixCode.js` (default: "thereisnospoon")
 
 ## Performance
 
