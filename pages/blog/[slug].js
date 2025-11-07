@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getMarkdownData, getMarkdownPaths } from '../../lib/markdown'
 import path from 'path'
 import { getImagePath } from '../../lib/utils'
+import BlueskyComments from '../../components/BlueskyComments'
 
 export default function BlogPost({ post }) {
   if (!post) return null
@@ -36,10 +37,18 @@ export default function BlogPost({ post }) {
           )}
         </header>
 
-        <div 
+        <div
           className="prose prose-invert prose-primary max-w-none"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
+
+        {/* Bluesky Comments */}
+        {post.bsky && post.bsky.uri && (
+          <BlueskyComments
+            uri={post.bsky.uri}
+            author={post.bsky.author}
+          />
+        )}
       </article>
     </Layout>
   )
