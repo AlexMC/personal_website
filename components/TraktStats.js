@@ -4,7 +4,7 @@ import { getRelativeTime } from '../lib/trakt';
 export default function TraktStats({ traktData }) {
   const [error, setError] = useState(null);
 
-  // Use pre-fetched data from build time
+  // Use data fetched from external backend API
   const history = traktData?.history || { episodes: [], movies: [] };
   const stats = traktData?.stats || null;
   const calendar = traktData?.calendar || [];
@@ -15,7 +15,7 @@ export default function TraktStats({ traktData }) {
       <div className="text-center py-20">
         <p className="text-red-500">{traktData.error}</p>
         <p className="text-primary-light text-sm mt-2">
-          Make sure TRAKT_* environment variables are configured in your deployment settings.
+          Unable to fetch Trakt data from the backend API.
         </p>
       </div>
     );

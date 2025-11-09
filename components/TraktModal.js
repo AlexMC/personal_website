@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import TraktStats from './TraktStats';
+import { getTraktData } from '../lib/trakt';
 
 export default function TraktModal({ isOpen, onClose }) {
   const [traktData, setTraktData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Load Trakt data from the pre-generated JSON file
+  // Fetch Trakt data from the external backend API
   useEffect(() => {
     if (isOpen && !traktData) {
-      fetch('/trakt-data.json')
-        .then(res => res.json())
+      setLoading(true);
+      getTraktData('alexmc')
         .then(data => {
           setTraktData(data);
           setLoading(false);
