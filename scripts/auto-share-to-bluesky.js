@@ -89,24 +89,31 @@ function createPostText(post) {
 // Post to Bluesky and get the URI
 async function postToBluesky(agent, post) {
   try {
-    const text = createPostText(post);
     const postUrl = `${SITE_URL}/blog/${post.slug}`;
 
-    // Create the post with embedded link
+    // Create shorter text without the URL (we'll use an embed card instead)
+    const maxExcerptLength = 280 - post.title.length - 10;
+    let excerpt = post.excerpt || '';
+    if (excerpt.length > maxExcerptLength) {
+      excerpt = excerpt.substring(0, maxExcerptLength - 3) + '...';
+    }
+
+    const text = `${post.title}\n\n${excerpt}`;
+
+    // Create the post with external link embed (this creates the preview card)
     const response = await agent.post({
       text: text,
       createdAt: new Date().toISOString(),
-      // Add facets for the URL to make it clickable
-      facets: [{
-        index: {
-          byteStart: text.lastIndexOf(postUrl),
-          byteEnd: text.lastIndexOf(postUrl) + postUrl.length
-        },
-        features: [{
-          $type: 'app.bsky.richtext.facet#link',
-          uri: postUrl
-        }]
-      }]
+      embed: {
+        $type: 'app.bsky.embed.external',
+        external: {
+          uri: postUrl,
+          title: post.title,
+          description: post.excerpt || 'Read the full post on my blog',
+          // Note: Bluesky will fetch the Open Graph image from your blog post URL
+          // Make sure your blog has proper OG tags for best preview
+        }
+      }
     });
 
     return {
