@@ -11,14 +11,14 @@ const Projects = ({ projects, limit }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {displayProjects.map((project, index) => (
-        <div key={index} className="block bg-surface p-6 border border-primary-dark hover:border-primary transition-all duration-300 group">
+        <div key={index} className="block bg-surface p-6 border border-primary-dark hover:border-primary transition-colors duration-300 group">
           <Link href={`/work/${project.slug}`} className="block">
             <div className="relative h-48 mb-6 bg-primary-dark/20">
               {project.image && (
                 <img
                   src={getImagePath(project.image)}
                   alt={project.title}
-                  className="w-full h-48 object-cover mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-300"
+                  className="w-full h-48 object-cover mix-blend-luminosity group-hover:mix-blend-normal duration-300"
                 />
               )}
             </div>

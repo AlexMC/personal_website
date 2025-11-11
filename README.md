@@ -1,6 +1,6 @@
 # Personal Website
 
-A modern, statically-generated personal website built with Next.js, featuring a blog, project showcase, GitHub contributions integration, and a hidden Konami code easter egg.
+A modern, statically-generated personal website built with Next.js, featuring a blog, project showcase, GitHub contributions integration, and two hidden easter eggs: a Konami code game bar and a Matrix code Trakt TV integration.
 
 **Live Site:** [alexcarvalho.me](https://alexcarvalho.me)
 
@@ -68,7 +68,22 @@ Features:
 - 30-minute cache using localStorage
 - Can be closed with ESC key
 
-### 6. Responsive Design
+### 6. Matrix Code Easter Egg (Trakt TV Integration)
+Hidden stats modal that displays your TV and movie watching activity! Type **"thereisnospoon"** anywhere on the site to activate.
+
+Features:
+- **Recently Watched**: Last 5 episodes and movies you've watched
+- **Overall Statistics**: Total movies, episodes, shows watched with watch time
+- **Upcoming Episodes**: Next 14 days of episodes from shows you're watching
+- **Beautiful UI**: Animated modal with Matrix-themed activation
+- **Real-time Data**: Fetches fresh data from external backend API
+- **ESC to Close**: Press ESC or click backdrop to close
+
+Powered by the [Trakt API](https://trakt.tv/) - tracks your TV shows and movies.
+
+**Architecture**: Uses the same pattern as GitHub contributions - data is fetched client-side from an external FastAPI backend that handles Trakt OAuth authentication securely.
+
+### 7. Responsive Design
 - Mobile-first approach
 - Terminal/hacker aesthetic
 - Custom animations (blink, slideUp)
@@ -98,11 +113,12 @@ npm install
 
 Create a `.env.local` file in the root directory:
 ```bash
-# GitHub configuration (optional - for contributions chart)
-NEXT_PUBLIC_GITHUB_TOKEN=your_github_personal_access_token
-NEXT_PUBLIC_GITHUB_USERNAME=your_github_username
+# External backend API URL (required for GitHub contributions and Trakt stats)
+NEXT_PUBLIC_API_URL=https://trendhighlighter.xyz
+# NEXT_PUBLIC_API_URL=http://localhost:8000  # For local development
 
-# Bluesky configuration (optional - for auto-sharing blog posts)
+# Bluesky configuration (optional - for auto-sharing blog posts via CI/CD)
+# These are only used by the GitHub Actions workflow, NOT in the browser
 # Get an app password from: https://bsky.app/settings/app-passwords
 BSKY_HANDLE=your_username.bsky.social
 BSKY_APP_PASSWORD=your-app-password-here
@@ -110,8 +126,10 @@ SITE_URL=https://yourdomain.com
 ```
 
 **Note:**
-- The GitHub token is optional. If not provided, the contributions chart will use fallback data or not display.
-- Bluesky credentials are optional. If not provided, you can still manually add comment metadata to posts. See [BLUESKY_COMMENTS.md](BLUESKY_COMMENTS.md) for details.
+- The `NEXT_PUBLIC_API_URL` points to an external FastAPI backend that handles authentication with GitHub and Trakt APIs
+- For local development, you'll need to run the backend server (see Backend Setup section below)
+- All API credentials are stored securely on the backend, never exposed to the client
+- **Bluesky credentials** are optional and only used by GitHub Actions for auto-sharing posts. The comment system itself fetches from Bluesky's public API client-side (no authentication needed for reading public posts). See [BLUESKY_COMMENTS.md](BLUESKY_COMMENTS.md) for details.
 
 4. Run the development server:
 ```bash
@@ -127,6 +145,69 @@ npm run dev
 - `npm start` - Run production build locally
 - `npm run lint` - Run Next.js linter
 - `npm run share-to-bluesky` - Manually share posts to Bluesky (requires BSKY_ env vars)
+
+### Backend Setup (For Local Development)
+
+This website uses an external FastAPI backend to handle API authentication for GitHub contributions and Trakt stats. The backend is located at `~/Projects/trend-highlighter/`.
+
+**Quick Start:**
+
+1. **Navigate to backend directory:**
+   ```bash
+   cd ~/Projects/trend-highlighter
+   ```
+
+2. **Install Python dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Configure environment variables:**
+
+   Create/update `.env` file in the backend directory:
+   ```bash
+   # For the personal website
+   CONTRIB_TOKEN=your_github_personal_access_token
+   WEBSITE_URL=http://localhost:3000
+
+   # Trakt API
+   TRAKT_CLIENT_ID=your_trakt_client_id
+   TRAKT_CLIENT_SECRET=your_trakt_client_secret
+   TRAKT_ACCESS_TOKEN=your_trakt_access_token
+   TRAKT_USERNAME=your_trakt_username
+
+   # Other APIs
+   MAILERLITE_API_KEY=your_mailerlite_key
+   GAMES_API_KEY=your_games_key
+   ```
+
+4. **Start the backend server:**
+   ```bash
+   uvicorn main:app --reload --port 8000
+   ```
+
+5. **Update website environment:**
+
+   In your website's `.env.local`:
+   ```bash
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+   ```
+
+**Backend Endpoints:**
+- `GET /api/website/github/contributions/{username}` - GitHub contribution calendar
+- `GET /api/website/trakt/{username}` - Trakt watch history and stats
+- `GET /api/website/games` - Gaming activity data
+- `POST /api/website/newsletter/subscribe` - Newsletter subscription
+
+**Architecture:**
+
+The backend acts as a secure proxy that:
+- Stores API credentials securely (never exposed to client)
+- Handles OAuth authentication with external services
+- Returns formatted data to the static website
+- Implements caching to reduce external API calls
+
+See `docs/static-site-dynamic-data-pattern.md` for detailed architecture documentation.
 
 ## Content Management
 
@@ -249,22 +330,16 @@ This site uses GitHub Actions for automated deployment to GitHub Pages.
    Go to Settings → Secrets and variables → Actions and add:
 
    Required secrets:
-   - `CONTRIB_TOKEN` - GitHub personal access token for contributions API
-   - `CONTRIB_USERNAME` - Your GitHub username
-   - `MAILERLITE_API_KEY` - MailerLite API key for newsletter
-   - `NEXT_PUBLIC_API_URL` - External API endpoint URL
+   - `NEXT_PUBLIC_API_URL` - External backend API URL (e.g., `https://trendhighlighter.xyz`)
 
-   Optional secrets (for Bluesky comments):
+   Optional secrets (for Bluesky auto-sharing):
    - `BSKY_HANDLE` - Your Bluesky handle (e.g., username.bsky.social)
    - `BSKY_APP_PASSWORD` - Bluesky app password (from https://bsky.app/settings/app-passwords)
 
    Optional variables:
    - `SITE_URL` - Your website URL (e.g., https://yourdomain.com)
 
-   **Creating a GitHub Personal Access Token:**
-   - Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
-   - Generate new token with `read:user` scope
-   - Copy the token and add it as `CONTRIB_TOKEN` secret
+   **Note:** All other API credentials (GitHub token, Trakt credentials, etc.) are stored on the external backend server, not in GitHub secrets. The static site only needs the backend URL. Bluesky credentials are only needed if you want automated post sharing via GitHub Actions.
 
    **Creating a Bluesky App Password:**
    - Go to Bluesky Settings → App Passwords
@@ -316,25 +391,42 @@ npm run build
 
 ### Environment Variables in Production
 
-The following environment variables are injected during the build process:
+The following environment variable is injected during the build process:
 
-- `CONTRIB_TOKEN` - GitHub contributions API authentication
-- `CONTRIB_USERNAME` - Your GitHub username for contributions chart
+**Website (Static Site):**
+- `NEXT_PUBLIC_API_URL` - External backend API URL (e.g., `https://trendhighlighter.xyz`)
+
+**Backend Server:**
+All API credentials are stored on the backend server, not in the static site:
+- `CONTRIB_TOKEN` - GitHub personal access token
+- `TRAKT_CLIENT_ID` - Trakt API client ID
+- `TRAKT_CLIENT_SECRET` - Trakt API client secret
+- `TRAKT_ACCESS_TOKEN` - Trakt API access token
+- `TRAKT_USERNAME` - Your Trakt username
 - `MAILERLITE_API_KEY` - Newsletter service authentication
-- `NEXT_PUBLIC_API_URL` - Base URL for external API calls
+- `GAMES_API_KEY` - Games API authentication
+- `WEBSITE_URL` - Your website domain (for CORS)
 
-**Note:** Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser and embedded in the static build.
+**Note:** The static site only knows the backend URL. All secrets remain on the backend server, never exposed to the browser.
 
 ### Deployment Checklist
 
 Before pushing to production:
-- [ ] All GitHub secrets are configured
+
+**Website (Static Site):**
+- [ ] GitHub secret `NEXT_PUBLIC_API_URL` is configured
 - [ ] GitHub Pages is enabled on `gh-pages` branch
 - [ ] Custom domain CNAME is correct (if applicable)
-- [ ] Environment variables are set in GitHub Actions
 - [ ] Test build locally with `npm run build`
 - [ ] Verify `/out` directory contains expected files
 - [ ] Check that images load correctly (use `/images/` path)
+
+**Backend Server:**
+- [ ] Backend is deployed and accessible at the configured URL
+- [ ] All backend environment variables are set (CONTRIB_TOKEN, TRAKT_*, etc.)
+- [ ] CORS is configured to allow your website domain
+- [ ] Backend endpoints return data correctly
+- [ ] Test endpoints: `/api/website/github/contributions/{username}`, `/api/website/trakt/{username}`
 
 ### Troubleshooting Deployment
 
@@ -379,7 +471,9 @@ personal_website/
 │   ├── Meta.js                 # SEO meta tags
 │   ├── Newsletter.js           # Email subscription form
 │   ├── Posts.js                # Blog post listing
-│   └── Projects.js             # Project cards
+│   ├── Projects.js             # Project cards
+│   ├── TraktModal.js           # Matrix code easter egg modal
+│   └── TraktStats.js           # Trakt TV statistics display
 ├── data/                        # Content storage (markdown files)
 │   ├── posts/                  # Blog posts
 │   │   ├── my-first-post.md
@@ -388,21 +482,27 @@ personal_website/
 │       ├── my-project.md
 │       └── ...
 ├── lib/                         # Utility functions and custom hooks
-│   ├── github.js               # GitHub API client
+│   ├── github.js               # GitHub API client (calls backend)
 │   ├── markdown.js             # Markdown processing pipeline
 │   ├── remarkImagePath.js      # Custom remark plugin for images
+│   ├── trakt.js                # Trakt API client (calls backend)
 │   ├── useKonamiCode.js        # Konami code detection hook
 │   ├── useLocalStorage.js      # localStorage persistence hook
+│   ├── useMatrixCode.js        # Matrix phrase detection hook
 │   └── utils.js                # Path utilities
 ├── pages/                       # Next.js pages (routes)
-│   ├── api/
-│   │   └── github/
-│   │       └── contributions.js # GitHub GraphQL API endpoint
+│   ├── api/                     # NOT USED (kept as reference)
+│   │   ├── github/
+│   │   │   └── contributions.js # Reference implementation
+│   │   └── trakt/               # Reference implementations
+│   │       ├── calendar.js      # (Actual endpoints are on backend)
+│   │       ├── history.js
+│   │       └── stats.js
 │   ├── blog/
 │   │   └── [slug].js           # Dynamic blog post pages
 │   ├── work/
 │   │   └── [slug].js           # Dynamic project pages
-│   ├── _app.js                 # App wrapper
+│   ├── _app.js                 # App wrapper with easter eggs
 │   ├── about.js                # About page
 │   ├── blog.js                 # Blog listing page
 │   ├── index.js                # Homepage
@@ -440,13 +540,19 @@ personal_website/
 
 ### Route Structure
 
+**Website Routes:**
 - `/` - Homepage (index.js)
 - `/blog` - Blog listing (blog.js)
 - `/blog/[slug]` - Individual blog post (blog/[slug].js)
 - `/work` - Projects listing (work.js)
 - `/work/[slug]` - Individual project (work/[slug].js)
 - `/about` - About page (about.js)
-- `/api/github/contributions` - GitHub API endpoint (api/github/contributions.js)
+
+**Backend API Routes** (external server):
+- `GET /api/website/github/contributions/{username}` - GitHub contribution data
+- `GET /api/website/trakt/{username}` - Trakt watch history, stats, and calendar
+- `GET /api/website/games` - Gaming activity data
+- `POST /api/website/newsletter/subscribe` - Newsletter subscription
 
 ## Customization
 
@@ -490,11 +596,18 @@ const navigation = [
 
 Edit `/components/Footer.js` to update social media links.
 
-### Konami Code
+### Easter Eggs
 
-To disable or modify the Konami code easter egg:
+**Konami Code (Game Bar):**
+To disable or modify:
 - Remove `<GameBar />` from `/components/Layout.js`
 - Or modify the code sequence in `/lib/useKonamiCode.js`
+
+**Matrix Code (Trakt Stats):**
+To disable or modify:
+- Remove the `<TraktModal />` and related hooks from `/pages/_app.js`
+- Or change the secret phrase in `/lib/useMatrixCode.js` (default: "thereisnospoon")
+- Requires backend API to be running and configured with Trakt credentials
 
 ## Performance
 

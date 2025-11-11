@@ -64,31 +64,48 @@ export default function GameBar() {
 
   useEffect(() => {
     fetchGames();
-    
+
     // Refresh data periodically (every 30 minutes)
     const intervalId = setInterval(() => {
       fetchGames(true); // Force refresh on interval
     }, CACHE_EXPIRATION);
-    
+
     // Clean up interval on component unmount
     return () => clearInterval(intervalId);
-  }, [fetchGames]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Toggle visibility when Konami code is detected
   useEffect(() => {
     if (konamiDetected) {
       // Show the effect
       setShowEffect(true);
-      
+
       // Toggle visibility - force it to be visible
       setIsVisible(true);
-      
+
       // Hide the effect after animation completes
       setTimeout(() => {
         setShowEffect(false);
       }, 1000);
     }
   }, [konamiDetected, setIsVisible]);
+
+  // Listen for custom game bar event (mobile tap trigger)
+  useEffect(() => {
+    const handleGameBarActivated = () => {
+      setShowEffect(true);
+      setIsVisible(true);
+      setTimeout(() => {
+        setShowEffect(false);
+      }, 1000);
+    };
+
+    document.addEventListener('gameBarActivated', handleGameBarActivated);
+
+    return () => {
+      document.removeEventListener('gameBarActivated', handleGameBarActivated);
+    };
+  }, [setIsVisible]);
 
   // Add ESC key handler to close the game bar
   useEffect(() => {
@@ -172,13 +189,13 @@ export default function GameBar() {
             </button>
             
             <div className="flex-1 overflow-hidden" ref={gamesContainerRef}>
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-2">
                 {gamesToRender.map((game, index) => (
-                  <div key={index} className="w-1/3 px-2 flex flex-col items-center">
+                  <div key={index} className="w-1/3 flex flex-col items-center min-w-0">
                     {game ? (
-                      <div className="w-32 h-40 relative mb-2">
+                      <div className="w-full aspect-[2/3] relative mb-2 max-w-[128px]">
                         {game.box_art_url ? (
-                          <Image 
+                          <Image
                             src={game.box_art_url}
                             alt={game.game_name}
                             fill
@@ -199,7 +216,7 @@ export default function GameBar() {
                         )}
                       </div>
                     ) : (
-                      <div className="w-32 h-40 bg-gray-800 rounded-md"></div>
+                      <div className="w-full aspect-[2/3] bg-gray-800 rounded-md max-w-[128px]"></div>
                     )}
                     {game ? (
                       <div className="text-center w-full">
