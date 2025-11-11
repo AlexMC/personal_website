@@ -64,7 +64,8 @@ function findPostsWithoutBsky() {
         slug: filename.replace(/\.md$/, ''),
         title: data.title,
         excerpt: data.excerpt,
-        date: data.date
+        date: data.date,
+        image: data.image  // Include image field for thumbnail
       });
     }
   }
