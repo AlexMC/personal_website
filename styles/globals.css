@@ -144,10 +144,6 @@
   /* CRT Effect Classes */
   .crt {
     position: relative;
-  }
-
-  /* Apply text-shadow animation only to headings and specific elements */
-  .crt h1, .crt h2, .crt h3, .crt h4, .crt h5, .crt h6 {
     animation: textShadow 1.6s infinite;
   }
 
