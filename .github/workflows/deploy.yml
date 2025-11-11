@@ -1,8 +1,18 @@
 name: Deploy to GitHub Pages
 
 on:
+  # Run on direct pushes to main (except blog posts, which trigger auto-share first)
   push:
     branches: [main]
+    paths-ignore:
+      - 'data/posts/**/*.md'
+
+  # Run after auto-share workflow completes (handles blog posts)
+  # This ensures deploy waits for bsky metadata to be committed
+  workflow_run:
+    workflows: ["Auto-share Blog Posts to Bluesky"]
+    types:
+      - completed
 
 permissions:
   contents: write
@@ -16,9 +26,13 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    # Always deploy, regardless of how it was triggered or auto-share result
+    # This ensures site updates even if auto-share is skipped or fails
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: main  # Always checkout latest main to include bsky metadata
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
