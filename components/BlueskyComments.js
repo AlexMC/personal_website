@@ -74,36 +74,7 @@ export default function BlueskyComments({ uri, author }) {
 
       {!loading && !error && thread && (
         <>
-          {/* Display the original post */}
-          <div className="mb-6 p-4 bg-white/5 rounded border border-primary/20">
-            <div className="flex items-start gap-3">
-              {thread.post?.author?.avatar && (
-                <img
-                  src={thread.post.author.avatar}
-                  alt={thread.post.author.displayName || thread.post.author.handle}
-                  className="w-12 h-12 rounded-full"
-                />
-              )}
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="font-medium">
-                    {thread.post?.author?.displayName || thread.post?.author?.handle}
-                  </span>
-                  <span className="text-gray-500 text-sm">
-                    @{thread.post?.author?.handle}
-                  </span>
-                </div>
-                <p className="whitespace-pre-wrap break-words">
-                  {thread.post?.record?.text}
-                </p>
-                <div className="mt-2 text-sm text-gray-500">
-                  {thread.post?.replyCount || 0} {thread.post?.replyCount === 1 ? 'reply' : 'replies'}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Display replies */}
+          {/* Display replies only */}
           {thread.replies && thread.replies.length > 0 ? (
             <div className="space-y-2">
               {thread.replies.map((reply, idx) => (
