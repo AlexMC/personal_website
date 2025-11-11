@@ -71,34 +71,13 @@ function findPostsWithoutBsky() {
   return posts;
 }
 
-// Create Bluesky post text
-function createPostText(post) {
-  const postUrl = `${SITE_URL}/blog/${post.slug}`;
-
-  // Bluesky has a 300 character limit for posts
-  const maxExcerptLength = 250 - post.title.length - postUrl.length - 10; // Leave room for formatting
-
-  let excerpt = post.excerpt || '';
-  if (excerpt.length > maxExcerptLength) {
-    excerpt = excerpt.substring(0, maxExcerptLength - 3) + '...';
-  }
-
-  return `${post.title}\n\n${excerpt}\n\n${postUrl}`;
-}
-
 // Post to Bluesky and get the URI
 async function postToBluesky(agent, post) {
   try {
     const postUrl = `${SITE_URL}/blog/${post.slug}`;
 
-    // Create shorter text without the URL (we'll use an embed card instead)
-    const maxExcerptLength = 280 - post.title.length - 10;
-    let excerpt = post.excerpt || '';
-    if (excerpt.length > maxExcerptLength) {
-      excerpt = excerpt.substring(0, maxExcerptLength - 3) + '...';
-    }
-
-    const text = `${post.title}\n\n${excerpt}`;
+    // Keep text minimal since the embed card will show title and description
+    const text = `New blog post: ${post.title}`;
 
     // Create the post with external link embed (this creates the preview card)
     const response = await agent.post({
