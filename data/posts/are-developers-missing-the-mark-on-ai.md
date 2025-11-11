@@ -10,6 +10,9 @@ tags:
   - Server Components
   - Web APIs
 image: /images/developers_ai.jpeg
+bsky:
+  uri: 'at://did:plc:e5jrggjpsfusibn5ejp6ajte/app.bsky.feed.post/3m5f74k2ey72c'
+  author: alexmcpt.bsky.social
 ---
 
 
