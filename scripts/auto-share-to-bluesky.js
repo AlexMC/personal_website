@@ -20,6 +20,9 @@ const path = require('path');
 const { BskyAgent } = require('@atproto/api');
 const matter = require('gray-matter');
 
+// Load environment variables from .env.local (for local development)
+require('dotenv').config({ path: path.join(process.cwd(), '.env.local') });
+
 // Configuration
 const POSTS_DIR = path.join(process.cwd(), 'data/posts');
 const BSKY_HANDLE = process.env.BSKY_HANDLE;
