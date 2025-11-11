@@ -1,16 +1,16 @@
 ---
-title: 'Most usefull AI enhanced tools for productivity and development.'
+title: Most usefull AI enhanced tools for productivity and development.
 date: '2025-01-15'
-excerpt: 'I use AI daily, not only when writting code or more broadly working on product development, but also on almost everything I do while dealing with devices'
-tags: ['Windsurf', 'Obsidian', 'Warp']
-# Uncomment and fill in with your actual Bluesky post data to enable comments
-# To get these values:
-# 1. Share your blog post on Bluesky
-# 2. The URI is in the format: at://did:plc:YOUR_DID/app.bsky.feed.post/POST_ID
-# 3. Your author handle is your Bluesky username (e.g., username.bsky.social)
-# bsky:
-#   uri: 'at://did:plc:abc123example/app.bsky.feed.post/abc123postid'
-#   author: 'yourusername.bsky.social'
+excerpt: >-
+  I use AI daily, not only when writting code or more broadly working on product
+  development, but also on almost everything I do while dealing with devices
+tags:
+  - Windsurf
+  - Obsidian
+  - Warp
+bsky:
+  uri: 'at://did:plc:e5jrggjpsfusibn5ejp6ajte/app.bsky.feed.post/3m5efgfh22g2o'
+  author: alexmcpt.bsky.social
 ---
 
 

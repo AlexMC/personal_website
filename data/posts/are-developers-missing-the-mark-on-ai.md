@@ -1,9 +1,18 @@
 ---
-title: "Are developers missing the mark on using AI?"
-date: "2025-01-20"
-excerpt: "When used correctly, AI can augment a developer's capacity by orders of magnitude. But here's the problem: many developers aren’t using AI correctly."
-tags: ["React", "Next.js", "Server Components", "Web APIs"]
-image: "/images/developers_ai.jpeg"
+title: Are developers missing the mark on using AI?
+date: '2025-01-20'
+excerpt: >-
+  When used correctly, AI can augment a developer's capacity by orders of
+  magnitude. But here's the problem: many developers aren’t using AI correctly.
+tags:
+  - React
+  - Next.js
+  - Server Components
+  - Web APIs
+image: /images/developers_ai.jpeg
+bsky:
+  uri: 'at://did:plc:e5jrggjpsfusibn5ejp6ajte/app.bsky.feed.post/3m5efgisgyf2p'
+  author: alexmcpt.bsky.social
 ---
 
 
