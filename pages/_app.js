@@ -17,6 +17,19 @@ function MyApp({ Component, pageProps }) {
     }
   }, [matrixDetected])
 
+  // Listen for mobile tap trigger on name/title
+  useEffect(() => {
+    const handleTraktModalActivated = () => {
+      setShowTraktModal(true)
+    }
+
+    document.addEventListener('traktModalActivated', handleTraktModalActivated)
+
+    return () => {
+      document.removeEventListener('traktModalActivated', handleTraktModalActivated)
+    }
+  }, [])
+
   return (
     <div className="min-h-screen flex flex-col">
       <Meta />
