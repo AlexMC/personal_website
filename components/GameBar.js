@@ -64,31 +64,48 @@ export default function GameBar() {
 
   useEffect(() => {
     fetchGames();
-    
+
     // Refresh data periodically (every 30 minutes)
     const intervalId = setInterval(() => {
       fetchGames(true); // Force refresh on interval
     }, CACHE_EXPIRATION);
-    
+
     // Clean up interval on component unmount
     return () => clearInterval(intervalId);
-  }, [fetchGames]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Toggle visibility when Konami code is detected
   useEffect(() => {
     if (konamiDetected) {
       // Show the effect
       setShowEffect(true);
-      
+
       // Toggle visibility - force it to be visible
       setIsVisible(true);
-      
+
       // Hide the effect after animation completes
       setTimeout(() => {
         setShowEffect(false);
       }, 1000);
     }
   }, [konamiDetected, setIsVisible]);
+
+  // Listen for custom game bar event (mobile tap trigger)
+  useEffect(() => {
+    const handleGameBarActivated = () => {
+      setShowEffect(true);
+      setIsVisible(true);
+      setTimeout(() => {
+        setShowEffect(false);
+      }, 1000);
+    };
+
+    document.addEventListener('gameBarActivated', handleGameBarActivated);
+
+    return () => {
+      document.removeEventListener('gameBarActivated', handleGameBarActivated);
+    };
+  }, [setIsVisible]);
 
   // Add ESC key handler to close the game bar
   useEffect(() => {
