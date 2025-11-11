@@ -93,6 +93,7 @@ async function uploadImageBlob(agent, imageUrl) {
             encoding: contentType
           });
 
+          console.log(`  📦 Upload response:`, JSON.stringify(uploadResponse.data, null, 2));
           resolve(uploadResponse.data.blob);
         } catch (error) {
           reject(error);
@@ -125,11 +126,20 @@ async function postToBluesky(agent, post) {
         const imageBlob = await uploadImageBlob(agent, imageUrl);
         external.thumb = imageBlob;
         console.log(`  ✅ Image uploaded successfully`);
+        console.log(`  🔍 Blob structure:`, JSON.stringify(imageBlob, null, 2));
       } catch (imageError) {
         console.warn(`  ⚠️  Failed to upload image: ${imageError.message}`);
         console.warn(`  ℹ️  Post will be created without image`);
       }
     }
+
+    console.log(`  📤 Sending post with embed:`, JSON.stringify({
+      text,
+      embed: {
+        $type: 'app.bsky.embed.external',
+        external
+      }
+    }, null, 2));
 
     // Create the post with external link embed (this creates the preview card)
     const response = await agent.post({
