@@ -11,7 +11,7 @@ export default function BlogPost({ post }) {
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://alexcarvalho.me'
   const postUrl = `${siteUrl}/blog/${post.slug}`
-  const ogImage = post.image ? `${siteUrl}${getImagePath(post.image)}` : `${siteUrl}/og-default.png`
+  const ogImage = post.image ? `${siteUrl}${getImagePath(post.image)}` : null
 
   return (
     <Layout>
@@ -26,14 +26,14 @@ export default function BlogPost({ post }) {
         <meta property="og:url" content={postUrl} />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.excerpt} />
-        <meta property="og:image" content={ogImage} />
+        {ogImage && <meta property="og:image" content={ogImage} />}
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={postUrl} />
         <meta property="twitter:title" content={post.title} />
         <meta property="twitter:description" content={post.excerpt} />
-        <meta property="twitter:image" content={ogImage} />
+        {ogImage && <meta property="twitter:image" content={ogImage} />}
 
         {/* Article specific */}
         <meta property="article:published_time" content={post.date} />
