@@ -144,6 +144,10 @@
   /* CRT Effect Classes */
   .crt {
     position: relative;
+  }
+
+  /* Optional: Apply text-shadow effect to specific elements if desired */
+  .crt-text-effect {
     animation: textShadow 1.6s infinite;
   }
 
