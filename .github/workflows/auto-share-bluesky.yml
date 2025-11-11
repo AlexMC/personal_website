@@ -1,0 +1,66 @@
+name: Auto-share Blog Posts to Bluesky
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data/posts/**/*.md'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  auto-share:
+    name: Share new posts to Bluesky
+    runs-on: ubuntu-latest
+
+    # Only run if the commit message doesn't contain [skip-bluesky]
+    if: "!contains(github.event.head_commit.message, '[skip-bluesky]')"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for proper commit
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run auto-share script
+        env:
+          BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
+          BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+          SITE_URL: ${{ vars.SITE_URL || 'https://yourdomain.com' }}
+        run: node scripts/auto-share-to-bluesky.js
+
+      - name: Commit and push changes
+        run: |
+          # Configure git
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          # Check if there are changes
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "📝 Changes detected, committing..."
+            git add data/posts/*.md
+            git commit -m "chore: add Bluesky metadata to blog posts [skip-bluesky]"
+            git push
+            echo "✅ Changes committed and pushed"
+          else
+            echo "ℹ️ No changes to commit"
+          fi
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "✅ Bluesky auto-share workflow completed successfully!"
+          echo ""
+          echo "Any new blog posts without Bluesky metadata have been:"
+          echo "  1. Shared on Bluesky"
+          echo "  2. Updated with comment thread URIs"
+          echo "  3. Committed back to the repository"
