@@ -1,6 +1,6 @@
 # Personal Website
 
-A modern, statically-generated personal website built with Next.js, featuring a blog, project showcase, GitHub contributions integration, and two hidden easter eggs: a Konami code game bar and a Matrix code Trakt TV integration. (and now also comments from bsky)
+A modern, statically-generated personal website built with Next.js, featuring a blog, project showcase, GitHub contributions integration, and two hidden easter eggs: a Konami code game bar and a Matrix code Trakt TV integration. (and now also comments from BlueSky)
 
 **Live Site:** [alexcarvalho.me](https://alexcarvalho.me)
 
