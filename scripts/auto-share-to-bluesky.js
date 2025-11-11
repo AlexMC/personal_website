@@ -17,6 +17,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
 const { BskyAgent } = require('@atproto/api');
 const matter = require('gray-matter');
 
@@ -71,6 +72,36 @@ function findPostsWithoutBsky() {
   return posts;
 }
 
+// Fetch image and upload as blob to Bluesky
+async function uploadImageBlob(agent, imageUrl) {
+  return new Promise((resolve, reject) => {
+    https.get(imageUrl, (res) => {
+      if (res.statusCode !== 200) {
+        reject(new Error(`Failed to fetch image: ${res.statusCode}`));
+        return;
+      }
+
+      const chunks = [];
+      res.on('data', (chunk) => chunks.push(chunk));
+      res.on('end', async () => {
+        try {
+          const imageBuffer = Buffer.concat(chunks);
+          const contentType = res.headers['content-type'] || 'image/jpeg';
+
+          // Upload the image as a blob
+          const uploadResponse = await agent.uploadBlob(imageBuffer, {
+            encoding: contentType
+          });
+
+          resolve(uploadResponse.data.blob);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    }).on('error', reject);
+  });
+}
+
 // Post to Bluesky and get the URI
 async function postToBluesky(agent, post) {
   try {
@@ -79,19 +110,34 @@ async function postToBluesky(agent, post) {
     // Keep text minimal since the embed card will show title and description
     const text = `New blog post: ${post.title}`;
 
+    // Prepare external embed
+    const external = {
+      uri: postUrl,
+      title: post.title,
+      description: post.excerpt || 'Read the full post on my blog',
+    };
+
+    // If post has an image, upload it as a blob and include in embed
+    if (post.image) {
+      try {
+        const imageUrl = `${SITE_URL}${post.image}`;
+        console.log(`  📸 Uploading image: ${imageUrl}`);
+        const imageBlob = await uploadImageBlob(agent, imageUrl);
+        external.thumb = imageBlob;
+        console.log(`  ✅ Image uploaded successfully`);
+      } catch (imageError) {
+        console.warn(`  ⚠️  Failed to upload image: ${imageError.message}`);
+        console.warn(`  ℹ️  Post will be created without image`);
+      }
+    }
+
     // Create the post with external link embed (this creates the preview card)
     const response = await agent.post({
       text: text,
       createdAt: new Date().toISOString(),
       embed: {
         $type: 'app.bsky.embed.external',
-        external: {
-          uri: postUrl,
-          title: post.title,
-          description: post.excerpt || 'Read the full post on my blog',
-          // Note: Bluesky will fetch the Open Graph image from your blog post URL
-          // Make sure your blog has proper OG tags for best preview
-        }
+        external: external
       }
     });
 
