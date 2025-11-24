@@ -29,9 +29,8 @@ order: 11
 - [/self-hosting](/self-hosting) - Services I self-host
 - [/sitemap](/sitemap) - This page
 - [/slashes](/slashes) - About slashpages
-- [/where](/where) - Where to find me online
 - [/wish](/wish) - Wishlist
 
 ## About This Site
 
-Built with Next.js, TailwindCSS, and deployed as a static site. [View source on GitHub](https://github.com/yourusername/yourrepo).
+Built with Next.js, TailwindCSS, and deployed as a static site.

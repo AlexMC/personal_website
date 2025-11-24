@@ -2,7 +2,7 @@
 title: "/defaults"
 slug: "defaults"
 description: "Default apps and tools I use"
-updatedAt: '2025-01-12'
+updatedAt: '2025-11-12'
 order: 5
 ---
 
@@ -12,20 +12,16 @@ Inspired by [defaults.rknight.me](https://defaults.rknight.me/)
 
 ## My Default Apps
 
-- **Mail:** Your email client
-- **Notes:** Your note-taking app
-- **Calendar:** Your calendar app
-- **RSS:** Your RSS reader
-- **Browser:** Your web browser
-- **Code Editor:** Your development environment
-- **Terminal:** Your terminal emulator
-- **Cloud Storage:** Your file storage solution
-- **Photo Library:** Where you store photos
-- **Music:** Your music service
-- **Podcasts:** Your podcast app
-- **Password Manager:** Your password solution
-- **Task Manager:** How you track todos
-
-## Why These Defaults?
-
-Brief explanations of why you chose these tools.
+- **Mail:** [Shortwave](https://www.shortwave.com/)
+- **Notes:** [Obsidian](https://obsidian.md/)
+- **Calendar:** [Notion Calendar](https://www.notion.com/product/calendar)
+- **RSS:** [Reeder](https://reederapp.com/)
+- **Browser:** [Arc](https://arc.net/)
+- **Code Editor:** [Cursor](https://cursor.com/download)
+- **Terminal:** [Warp](https://www.warp.dev/)
+- **Cloud Storage:** A combination of GDrive, iCloud and a private Cloud
+- **Photo Library:** [Immich](https://immich.app/) (self hosted)
+- **Music:** [Spotify](https://open.spotify.com/)
+- **Podcasts:** [Overcast](https://overcast.fm/)
+- **Password Manager:** [1Password](https://1password.com/)
+- **Task Manager:** [Obsidian](https://obsidian.md/)

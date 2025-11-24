@@ -2,7 +2,7 @@
 title: "/wish"
 slug: "wish"
 description: "My wishlist of things I'd like"
-updatedAt: '2025-01-12'
+updatedAt: '2025-11-24'
 order: 14
 ---
 
@@ -14,26 +14,20 @@ A collection of items, experiences, and ideas I'm interested in.
 
 ### Tech & Gear
 
-- Hardware you're interested in
-- Software or tools you want to try
-- Gadgets on your radar
+- A Candy Cabinet (vintage arcade machine).
+- A proper racing simulator.
 
 ### Books
 
-- Books on your reading list
-- Topics you want to learn about through reading
+- Read more books... been struggling to make time for reading, need to change this.
 
 ### Experiences
 
-- Places you want to visit
-- Things you want to try
-- Skills you want to learn
-
-### For the Website
-
-- Features you want to add
-- Content you want to create
-- Improvements you're planning
+I'm not a very traveled person and want to change that.
+Places I would like to visit:
+- Japan;
+- Australia & New Zealand;
+- Italy (been there before but want to revisit with family).
 
 ## Already Have It?
 

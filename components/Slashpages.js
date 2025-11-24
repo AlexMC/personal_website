@@ -14,7 +14,7 @@ const Slashpages = ({ pages }) => {
             </h3>
             <p className="text-sm text-primary-light">{page.description}</p>
             {page.updatedAt && (
-              <div className="text-xs text-primary-dark mt-4">
+              <div className="text-xs text-primary-light mt-4">
                 Updated: {page.updatedAt}
               </div>
             )}
