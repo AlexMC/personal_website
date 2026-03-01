@@ -76,12 +76,12 @@ Features:
 - **Overall Statistics**: Total movies, episodes, shows watched with watch time
 - **Upcoming Episodes**: Next 14 days of episodes from shows you're watching
 - **Beautiful UI**: Animated modal with Matrix-themed activation
-- **Real-time Data**: Fetches fresh data from external backend API
+- **Real-time Data**: Fetches fresh data from Cloudflare Worker API
 - **ESC to Close**: Press ESC or click backdrop to close
 
 Powered by the [Trakt API](https://trakt.tv/) - tracks your TV shows and movies.
 
-**Architecture**: Uses the same pattern as GitHub contributions - data is fetched client-side from an external FastAPI backend that handles Trakt OAuth authentication securely.
+**Architecture**: Uses the same pattern as GitHub contributions - data is fetched client-side from a Cloudflare Worker backend (api.alexcarvalho.me) that handles API authentication securely.
 
 ### 7. Responsive Design
 - Mobile-first approach
@@ -114,7 +114,7 @@ npm install
 Create a `.env.local` file in the root directory:
 ```bash
 # External backend API URL (required for GitHub contributions and Trakt stats)
-NEXT_PUBLIC_API_URL=https://trendhighlighter.xyz
+NEXT_PUBLIC_API_URL=https://api.alexcarvalho.me
 # NEXT_PUBLIC_API_URL=http://localhost:8000  # For local development
 
 # Bluesky configuration (optional - for auto-sharing blog posts via CI/CD)
@@ -126,7 +126,7 @@ SITE_URL=https://yourdomain.com
 ```
 
 **Note:**
-- The `NEXT_PUBLIC_API_URL` points to an external FastAPI backend that handles authentication with GitHub and Trakt APIs
+- The `NEXT_PUBLIC_API_URL` points to the Cloudflare Worker API that handles authentication with external services
 - For local development, you'll need to run the backend server (see Backend Setup section below)
 - All API credentials are stored securely on the backend, never exposed to the client
 - **Bluesky credentials** are optional and only used by GitHub Actions for auto-sharing posts. The comment system itself fetches from Bluesky's public API client-side (no authentication needed for reading public posts). See [BLUESKY_COMMENTS.md](BLUESKY_COMMENTS.md) for details.
@@ -146,68 +146,6 @@ npm run dev
 - `npm run lint` - Run Next.js linter
 - `npm run share-to-bluesky` - Manually share posts to Bluesky (requires BSKY_ env vars)
 
-### Backend Setup (For Local Development)
-
-This website uses an external FastAPI backend to handle API authentication for GitHub contributions and Trakt stats. The backend is located at `~/Projects/trend-highlighter/`.
-
-**Quick Start:**
-
-1. **Navigate to backend directory:**
-   ```bash
-   cd ~/Projects/trend-highlighter
-   ```
-
-2. **Install Python dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Configure environment variables:**
-
-   Create/update `.env` file in the backend directory:
-   ```bash
-   # For the personal website
-   CONTRIB_TOKEN=your_github_personal_access_token
-   WEBSITE_URL=http://localhost:3000
-
-   # Trakt API
-   TRAKT_CLIENT_ID=your_trakt_client_id
-   TRAKT_CLIENT_SECRET=your_trakt_client_secret
-   TRAKT_ACCESS_TOKEN=your_trakt_access_token
-   TRAKT_USERNAME=your_trakt_username
-
-   # Other APIs
-   MAILERLITE_API_KEY=your_mailerlite_key
-   GAMES_API_KEY=your_games_key
-   ```
-
-4. **Start the backend server:**
-   ```bash
-   uvicorn main:app --reload --port 8000
-   ```
-
-5. **Update website environment:**
-
-   In your website's `.env.local`:
-   ```bash
-   NEXT_PUBLIC_API_URL=http://localhost:8000
-   ```
-
-**Backend Endpoints:**
-- `GET /api/website/github/contributions/{username}` - GitHub contribution calendar
-- `GET /api/website/trakt/{username}` - Trakt watch history and stats
-- `GET /api/website/games` - Gaming activity data
-- `POST /api/website/newsletter/subscribe` - Newsletter subscription
-
-**Architecture:**
-
-The backend acts as a secure proxy that:
-- Stores API credentials securely (never exposed to client)
-- Handles OAuth authentication with external services
-- Returns formatted data to the static website
-- Implements caching to reduce external API calls
-
-See `docs/static-site-dynamic-data-pattern.md` for detailed architecture documentation.
 
 ## Content Management
 
@@ -330,7 +268,7 @@ This site uses GitHub Actions for automated deployment to GitHub Pages.
    Go to Settings → Secrets and variables → Actions and add:
 
    Required secrets:
-   - `NEXT_PUBLIC_API_URL` - External backend API URL (e.g., `https://trendhighlighter.xyz`)
+   - `NEXT_PUBLIC_API_URL` - External backend API URL (e.g., `https://api.alexcarvalho.me`)
 
    Optional secrets (for Bluesky auto-sharing):
    - `BSKY_HANDLE` - Your Bluesky handle (e.g., username.bsky.social)
@@ -339,7 +277,7 @@ This site uses GitHub Actions for automated deployment to GitHub Pages.
    Optional variables:
    - `SITE_URL` - Your website URL (e.g., https://yourdomain.com)
 
-   **Note:** All other API credentials (GitHub token, Trakt credentials, etc.) are stored on the external backend server, not in GitHub secrets. The static site only needs the backend URL. Bluesky credentials are only needed if you want automated post sharing via GitHub Actions.
+   **Note:** All other API credentials (GitHub token, Trakt credentials, etc.) are stored as Cloudflare Worker secrets, not in GitHub secrets. The static site only needs the backend URL. Bluesky credentials are only needed if you want automated post sharing via GitHub Actions.
 
    **Creating a Bluesky App Password:**
    - Go to Bluesky Settings → App Passwords
@@ -394,7 +332,7 @@ npm run build
 The following environment variable is injected during the build process:
 
 **Website (Static Site):**
-- `NEXT_PUBLIC_API_URL` - External backend API URL (e.g., `https://trendhighlighter.xyz`)
+- `NEXT_PUBLIC_API_URL` - External backend API URL (e.g., `https://api.alexcarvalho.me`)
 
 **Backend Server:**
 All API credentials are stored on the backend server, not in the static site:
@@ -426,7 +364,7 @@ Before pushing to production:
 - [ ] All backend environment variables are set (CONTRIB_TOKEN, TRAKT_*, etc.)
 - [ ] CORS is configured to allow your website domain
 - [ ] Backend endpoints return data correctly
-- [ ] Test endpoints: `/api/website/github/contributions/{username}`, `/api/website/trakt/{username}`
+- [ ] Test endpoints: `/api/github/contributions/{username}`, `/api/trakt/{username}`
 
 ### Troubleshooting Deployment
 
@@ -549,10 +487,10 @@ personal_website/
 - `/about` - About page (about.js)
 
 **Backend API Routes** (external server):
-- `GET /api/website/github/contributions/{username}` - GitHub contribution data
-- `GET /api/website/trakt/{username}` - Trakt watch history, stats, and calendar
-- `GET /api/website/games` - Gaming activity data
-- `POST /api/website/newsletter/subscribe` - Newsletter subscription
+- `GET /api/github/contributions/{username}` - GitHub contribution data
+- `GET /api/trakt/{username}` - Trakt watch history, stats, and calendar
+- `GET /api/games` - Gaming activity data
+- `POST /api/newsletter/subscribe` - Newsletter subscription
 
 ## Customization
 
