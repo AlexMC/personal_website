@@ -1,0 +1,26 @@
+name = "website-api"
+main = "src/index.ts"
+compatibility_date = "2026-03-01"
+
+routes = [
+  { pattern = "api.alexcarvalho.me/*", zone_name = "alexcarvalho.me" }
+]
+
+[[kv_namespaces]]
+binding = "TRAKT_TOKENS"
+id = "a6f4dc39aa7c4893aecd3e6843175433"
+
+# Non-secret config
+[vars]
+ALLOWED_ORIGIN = "https://alexcarvalho.me"
+# TODO: Replace with actual Cloudflare Tunnel URL once set up
+GAMES_API_URL = "https://games-api.alexcarvalho.me"
+
+# Secrets (set via `wrangler secret put <NAME>`):
+# GITHUB_TOKEN
+# TRAKT_CLIENT_ID
+# TRAKT_CLIENT_SECRET
+# TRAKT_ACCESS_TOKEN    (bootstrap only)
+# TRAKT_REFRESH_TOKEN   (bootstrap only)
+# MAILERLITE_API_KEY
+# GAMES_API_KEY

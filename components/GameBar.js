@@ -33,7 +33,7 @@ export default function GameBar() {
       }
       
       console.log('Fetching fresh game data');
-      const response = await fetch(`${API_URL}/api/website/games`);
+      const response = await fetch(`${API_URL}/api/games`);
       
       if (!response.ok) {
         throw new Error(`Error fetching games: ${response.status}`);

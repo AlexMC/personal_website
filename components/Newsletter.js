@@ -14,7 +14,7 @@ const Newsletter = () => {
     setError('');
 
     try {
-      const response = await axios.post(`${API_URL}/api/website/newsletter/subscribe`, { email });
+      const response = await axios.post(`${API_URL}/api/newsletter/subscribe`, { email });
       setStatus('success');
       setEmail('');
     } catch (err) {
