@@ -6,9 +6,6 @@ routes = [
   { pattern = "api.alexcarvalho.me/*", zone_name = "alexcarvalho.me" }
 ]
 
-[[kv_namespaces]]
-binding = "TRAKT_TOKENS"
-id = "a6f4dc39aa7c4893aecd3e6843175433"
 
 # Non-secret config
 [vars]

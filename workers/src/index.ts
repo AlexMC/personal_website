@@ -6,14 +6,8 @@ import games from './handlers/games';
 import newsletter from './handlers/newsletter';
 
 export interface Env {
-  // KV
-  TRAKT_TOKENS: KVNamespace;
   // Secrets
   GITHUB_TOKEN: string;
-  TRAKT_CLIENT_ID: string;
-  TRAKT_CLIENT_SECRET: string;
-  TRAKT_ACCESS_TOKEN: string;
-  TRAKT_REFRESH_TOKEN: string;
   MAILERLITE_API_KEY: string;
   GAMES_API_KEY: string;
   // Config vars
