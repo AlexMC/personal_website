@@ -2,12 +2,17 @@
 title: Syncing Obsidian Tasks with Apple Reminders... The Hard Way
 date: '2026-03-05'
 excerpt: >-
-  I wanted my Obsidian tasks to show up on my watch. Sounds simple, right? It wasn't. Here's how I built a bidirectional sync between Obsidian and Apple Reminders.
+  I wanted my Obsidian tasks to show up on my watch. Sounds simple, right? It
+  wasn't. Here's how I built a bidirectional sync between Obsidian and Apple
+  Reminders.
 tags:
   - Obsidian
   - Apple
   - Automation
   - Python
+bsky:
+  uri: 'at://did:plc:e5jrggjpsfusibn5ejp6ajte/app.bsky.feed.post/3mgdgdp56la2u'
+  author: alexmcpt.bsky.social
 ---
 
 Obsidian is my second brain. Everything I need to track, plan, or remember lives there. But there's a problem: I don't always have Obsidian open and opening it specially on mobile is not as fast as it should. What I do always have? My phone and my watch. And they all speak one language, Apple Reminders.
