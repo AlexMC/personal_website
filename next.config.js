@@ -4,11 +4,11 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     unoptimized: true,
-    domains: [
-      'github.com', 
-      'raw.githubusercontent.com',
-      'neoclone.screenscraper.fr',
-      'cdn.thegamesdb.net'
+    remotePatterns: [
+      { hostname: 'github.com' },
+      { hostname: 'raw.githubusercontent.com' },
+      { hostname: 'neoclone.screenscraper.fr' },
+      { hostname: 'cdn.thegamesdb.net' },
     ],
   },
   basePath: '',
