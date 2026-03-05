@@ -612,3 +612,4 @@ For issues or questions:
 - Styled with [Tailwind CSS](https://tailwindcss.com/)
 - Deployed on [GitHub Pages](https://pages.github.com/)
 - Icons and assets from various open-source projects
+
