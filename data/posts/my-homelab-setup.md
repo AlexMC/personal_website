@@ -11,6 +11,9 @@ tags:
   - Proxmox
   - Ansible
   - Infrastructure
+bsky:
+  uri: 'at://did:plc:e5jrggjpsfusibn5ejp6ajte/app.bsky.feed.post/3mgryrwyimz2k'
+  author: alexmcpt.bsky.social
 ---
 
 It started with a single question: can I run Home Assistant on something other than a Raspberry Pi?
