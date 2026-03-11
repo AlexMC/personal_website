@@ -1,12 +1,13 @@
 import Head from 'next/head'
 import Layout from '../components/Layout'
 import Projects from '../components/Projects'
+import Tools from '../components/Tools'
 import Posts from '../components/Posts'
 import ContributionsChart from '../components/ContributionsChart'
 import Newsletter from '../components/Newsletter'
 import { getAllMarkdownFiles } from '../lib/markdown'
 
-export default function Home({ posts, projects }) {
+export default function Home({ posts, projects, tools }) {
   return (
     <Layout>
       <Head>
@@ -33,6 +34,11 @@ export default function Home({ posts, projects }) {
         </section>
 
         <section>
+          <h2 className="text-2xl font-bold mb-12 text-primary">&gt; latest tools</h2>
+          <Tools tools={tools} limit={2} />
+        </section>
+
+        <section>
           <ContributionsChart />
         </section>
 
@@ -47,14 +53,17 @@ export default function Home({ posts, projects }) {
 export async function getStaticProps() {
   const posts = getAllMarkdownFiles('data/posts')
   const projects = getAllMarkdownFiles('data/projects')
-  
+  const tools = getAllMarkdownFiles('data/tools')
+    .sort((a, b) => (a.order || 0) - (b.order || 0))
+
   // Sort posts by date
   posts.sort((a, b) => new Date(b.date) - new Date(a.date))
-  
+
   return {
     props: {
       posts,
-      projects
+      projects,
+      tools
     }
   }
 }
