@@ -51,6 +51,9 @@ export default function Header() {
             <Link href="/work" className="hover:text-primary transition-colors">
               WORK
             </Link>
+            <Link href="/tools" className="hover:text-primary transition-colors">
+              TOOLS
+            </Link>
             <Link href="/blog" className="hover:text-primary transition-colors">
               BLOG
             </Link>
