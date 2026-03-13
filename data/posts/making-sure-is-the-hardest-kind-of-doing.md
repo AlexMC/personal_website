@@ -11,6 +11,9 @@ tags:
   - Imposter Syndrome
   - Product Development
 image: /images/making-sure.jpeg
+bsky:
+  uri: 'at://did:plc:e5jrggjpsfusibn5ejp6ajte/app.bsky.feed.post/3mgwwn6qo222h'
+  author: alexmcpt.bsky.social
 ---
 
 # "Making Sure" Is the Hardest Kind of Doing
