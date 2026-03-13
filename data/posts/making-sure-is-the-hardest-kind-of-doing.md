@@ -11,7 +11,6 @@ tags:
   - Imposter Syndrome
   - Product Development
 image: /images/making-sure.jpeg
-draft: true
 ---
 
 # "Making Sure" Is the Hardest Kind of Doing
