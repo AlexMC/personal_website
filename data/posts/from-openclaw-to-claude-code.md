@@ -10,6 +10,9 @@ tags:
   - Claude Code
   - Automation
   - Productivity
+bsky:
+  uri: 'at://did:plc:e5jrggjpsfusibn5ejp6ajte/app.bsky.feed.post/3mixzrwyraq2b'
+  author: alexmcpt.bsky.social
 ---
 
 It started with a networking problem I couldn't solve.
