@@ -560,7 +560,7 @@ Everything search engines and AI answer engines (ChatGPT, Claude, Perplexity, Go
 - **`/work-with-me`**: the hiring page (fractional CTPO, advisory, AI builds via Abstract Extraordinary) with `Service` and `FAQPage` structured data. Home, About, `/hello` and the footer link to it.
 - Markdown `# ` headings are rendered as `<h2>` so each page keeps a single `<h1>` (the front-matter title).
 - Blog posts can set an optional `updated: 'YYYY-MM-DD'` front-matter field; it feeds `dateModified` and the sitemap `lastmod`.
-- Only projects with `featured: true` appear on the home page; `/work` lists featured projects first.
+- Projects are case studies. Front matter: `company`, `role`, `period`, `location` (shown under the title and used in structured data) and `order` (display order on `/work`). Only `featured: true` projects appear on the home page (first two by `order`). Projects without an `image` get a generated card at `og/work/<slug>.png`.
 - Keep images under ~300 KB. Use a looping `<video autoplay loop muted playsinline>` MP4 instead of animated GIFs.
 
 ## Performance

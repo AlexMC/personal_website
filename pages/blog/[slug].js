@@ -5,14 +5,14 @@ import path from 'path'
 import { getImagePath } from '../../lib/utils'
 import BlueskyComments from '../../components/BlueskyComments'
 import Seo from '../../components/Seo'
-import { site, postCardPath } from '../../lib/site.mjs'
+import { site, cardPath } from '../../lib/site.mjs'
 import { blogPostingSchema, breadcrumbSchema } from '../../lib/schema'
 
 export default function BlogPost({ post }) {
   if (!post) return null
 
   const postPath = `/blog/${post.slug}`
-  const image = post.image ? getImagePath(post.image) : postCardPath(post.slug)
+  const image = post.image ? getImagePath(post.image) : cardPath('blog', post.slug)
 
   return (
     <Layout>

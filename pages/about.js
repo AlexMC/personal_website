@@ -85,10 +85,16 @@ export default function About() {
                 .
               </p>
               <p>
-                Before that I scaled engineering and product at Streetbees (0 to 100 people), Indie
-                Campers (0 to 30) and LinkedCare, founded my own startup, and started out shipping Ruby
-                on Rails products like Besttables, later acquired by TripAdvisor. I studied Computer
-                Science engineering at {site.education.name}.
+                Before that I built engineering at{' '}
+                <Link href="/work/streetbees" className="text-primary hover:text-glow underline">Streetbees</Link>{' '}
+                through its $12M Series A, built{' '}
+                <Link href="/work/indie-campers" className="text-primary hover:text-glow underline">Indie Campers</Link>
+                &apos; tech and product team from 0 to 30, took{' '}
+                <Link href="/work/linkedcare-ehr-and-phr" className="text-primary hover:text-glow underline">LinkedCare</Link>
+                &apos;s health-record platform into the US, and founded my own startup. I started out leading
+                the Ruby on Rails team that built{' '}
+                <Link href="/work/besttables" className="text-primary hover:text-glow underline">Besttables</Link>, later
+                acquired by TripAdvisor. I studied Computer Science engineering at {site.education.name}.
               </p>
             </div>
           </div>
@@ -134,6 +140,11 @@ export default function About() {
                   )}
                 </h3>
                 {job.highlight && <p className="text-primary-light mt-1">{job.highlight}</p>}
+                {job.caseStudy && (
+                  <Link href={job.caseStudy} className="inline-block mt-1 text-sm text-primary hover:text-glow transition-colors">
+                    CASE STUDY &rarr;
+                  </Link>
+                )}
               </li>
             ))}
           </ol>

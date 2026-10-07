@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getImagePath } from '../lib/utils';
+import { cardPath } from '../lib/site.mjs';
 
 const Projects = ({ projects, limit }) => {
   const displayProjects = limit ? projects.slice(0, limit) : projects;
@@ -14,13 +15,13 @@ const Projects = ({ projects, limit }) => {
         <div key={index} className="block bg-surface p-6 border border-primary-dark hover:border-primary transition-colors duration-300 group">
           <Link href={`/work/${project.slug}`} className="block">
             <div className="relative h-48 mb-6 bg-primary-dark/20">
-              {project.image && (
-                <img
-                  src={getImagePath(project.image)}
-                  alt={project.title}
-                  className="w-full h-48 object-cover mix-blend-luminosity group-hover:mix-blend-normal duration-300"
-                />
-              )}
+              <img
+                src={project.image ? getImagePath(project.image) : cardPath('work', project.slug)}
+                alt={project.title}
+                className={`w-full h-48 mix-blend-luminosity group-hover:mix-blend-normal duration-300 ${
+                  project.image ? 'object-cover' : 'object-contain bg-black'
+                }`}
+              />
             </div>
             <h3 className="text-xl font-bold mb-3 text-primary">{project.title}</h3>
             <p className="text-primary-light mb-6">{project.description}</p>

@@ -11,7 +11,7 @@ export default function Work({ projects }) {
       <Seo
         title="Work"
         path="/work"
-        description={`Selected work by ${site.name}: AI VFX tooling for Robert Zemeckis' Here at Metaphysic.ai, the LinkedCare health record platform, and more.`}
+        description={`Case studies by ${site.name}: AI de-aging for Robert Zemeckis' Here at Metaphysic.ai, scaling engineering at Streetbees and Indie Campers, LinkedCare's health records, and Besttables.`}
         schema={[
           breadcrumbSchema([
             { name: 'Home', path: '/' },
@@ -36,9 +36,8 @@ export default function Work({ projects }) {
 }
 
 export async function getStaticProps() {
-  // Featured projects first; archived side projects after.
-  const projects = getAllMarkdownFiles('data/projects')
-    .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)))
+  // Curated order from front matter (`order`); unordered projects go last.
+  const projects = getAllMarkdownFiles('data/projects').sort((a, b) => (a.order ?? 99) - (b.order ?? 99))
 
   return { props: { projects } }
 }

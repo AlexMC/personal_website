@@ -1,10 +1,15 @@
 ---
-title: "HERE (tech tools)"
-description: "(As Metaphysic CTPO) Metaphysic’s Technical Breakthroughs in the VFX Work of Robert Zemeckis' *Here*."
+title: "Here: Real-Time AI De-Aging for Robert Zemeckis' Film"
+description: "(CPTO at Metaphysic.ai) Led the ML research, engineering and product teams behind the AI face replacement and de-aging of Tom Hanks and Robin Wright in Robert Zemeckis' *Here*."
+company: "Metaphysic.ai"
+role: "Chief Product & Technology Officer"
+period: "2021 – 2025"
+location: "London, UK"
 technologies: ["GenAI", "Python", "ML Infra"]
 link: "https://metaphysic.ai/studios/here-movie/"
 image: "/images/here.png"
 featured: true
+order: 1
 ---
 
 # My Journey with Metaphysic’s VFX Work on Robert Zemeckis' *Here*

@@ -1,10 +1,12 @@
 ---
 title: "Trend Highlighter"
 description: "(personal project, archived) Surface the most relevant and trending content from the Farcaster social network."
+role: "Personal project"
 technologies: ["Python", "TypeScript", "Tailwind"]
 link: ""
 image: "/images/trendhighlighter.png"
 featured: false
+order: 6
 ---
 
 # Building a Real-time Link Aggregator for Farcaster

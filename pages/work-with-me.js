@@ -26,10 +26,10 @@ const offers = [
 
 const proof = [
   { text: "Chief Product & Technology Officer at Metaphysic.ai: sole AI VFX provider on Robert Zemeckis' Here, named one of TIME's 100 Most Influential Companies of 2023.", href: '/work/here-tech-tools' },
-  { text: "VP of Engineering at Streetbees: scaled tech and product from 0 to 100 people through one of the UK's most successful Series A rounds." },
-  { text: 'Director of Product & Technology at Indie Campers: built the tech and product team from 0 to 30.' },
+  { text: 'VP of Engineering at Streetbees: built the engineering team as the company grew from ~20 to ~75 people, through a $12M Series A led by Atomico.', href: '/work/streetbees' },
+  { text: 'Director of Product & Technology at Indie Campers: built the tech and product team from 0 to 30 and the platform behind a fleet that grew to 1,200+ vans in 15 countries.', href: '/work/indie-campers' },
   { text: 'CTPO at LinkedCare: microservices EHR/PHR platform, taken from Portugal into the US market.', href: '/work/linkedcare-ehr-and-phr' },
-  { text: 'Besttables: led tech and product from idea to acquisition by TripAdvisor.' },
+  { text: 'Besttables: led the team that built the restaurant booking platform from proposal to launch; TripAdvisor acquired it in 2015.', href: '/work/besttables' },
   { text: `Two-time founder: Outitude (€100k seed raised in two weeks) and ${site.company.name}.` },
 ]
 

@@ -77,11 +77,19 @@ function render(svg) {
     .asPng()
 }
 
-export function renderPostCard({ title, date, label = '> blog' }) {
-  const titleSize = 60
-  const lines = wrap(title, titleSize, WIDTH - PAD * 2, 3)
+// Long titles step down to a smaller size with an extra line before truncating.
+const TITLE_STYLES = [
+  { size: 60, lineHeight: 78, maxLines: 3 },
+  { size: 50, lineHeight: 64, maxLines: 4 },
+]
+
+export function renderTitleCard({ title, meta, label = '> blog' }) {
+  const maxWidth = WIDTH - PAD * 2
+  const style =
+    TITLE_STYLES.find((s) => wrap(title, s.size, maxWidth, Infinity).length <= s.maxLines) ?? TITLE_STYLES.at(-1)
+  const lines = wrap(title, style.size, maxWidth, style.maxLines)
   const titleSvg = lines
-    .map((line, i) => text(PAD, 205 + i * 78, titleSize, 700, COLORS.primary, line))
+    .map((line, i) => text(PAD, 200 + i * style.lineHeight, style.size, 700, COLORS.primary, line))
     .join('\n  ')
   return render(
     frame(`
@@ -92,7 +100,7 @@ export function renderPostCard({ title, date, label = '> blog' }) {
   ${portrait(PAD, 446, 112)}
   ${text(PAD + 140, 492, 30, 700, COLORS.primary, site.name.toUpperCase())}
   ${text(PAD + 140, 532, 22, 400, COLORS.light, site.tagline.toUpperCase())}
-  ${date ? text(WIDTH - PAD, 532, 22, 400, COLORS.medium, date, 'text-anchor="end"') : ''}`),
+  ${meta ? text(WIDTH - PAD, 532, 22, 400, COLORS.medium, meta, 'text-anchor="end"') : ''}`),
   )
 }
 
