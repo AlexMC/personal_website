@@ -1,0 +1,60 @@
+# Alexandre Carvalho
+
+> Alexandre Carvalho is a Lisbon-based CTPO and AI product & engineering leader with 20+ years building and scaling technology products. He was Chief Product & Technology Officer at Metaphysic.ai, the generative AI company behind the de-aging visual effects in Robert Zemeckis' film Here, and now runs Abstract Extraordinary, a senior engineering studio that takes AI systems from sketch to production.
+
+Alexandre Carvalho (also known as Alex Carvalho) is based in Lisbon, Portugal. He works as an advisor and fractional CTPO, and builds production AI systems through Abstract Extraordinary (https://abstractextraordinary.com/).
+
+- Role: CTPO, AI Product & Engineering Leader
+- Expertise: Generative AI, AI product management, Machine learning infrastructure, Synthetic media, Engineering leadership, Product management, Software architecture, Startup scaling, Retrieval-augmented generation (RAG)
+- Education: Engineer's degree, Computer Science, Instituto Superior Técnico (2008)
+- Profiles: https://www.linkedin.com/in/alexandremcarvalho/, https://github.com/AlexMC
+- Hiring (fractional CTPO, advisory, AI builds): https://alexcarvalho.me/work-with-me
+- Contact: https://alexcarvalho.me/hello
+
+## About
+
+- [About Alexandre Carvalho](https://alexcarvalho.me/about): bio, career history, skills and FAQ
+- [Work with me](https://alexcarvalho.me/work-with-me): fractional CTPO, advisory, and AI systems built with Abstract Extraordinary
+
+## Career
+
+- 2025 – present: Founder & CEO, Abstract Extraordinary. Senior engineering studio taking AI systems from first sketch to production: retrieval and reasoning systems, real-time AI, product design and full-stack delivery.
+- 2025 – present: Co-Founder, Byteline
+- 2020 – 2025: Advisor / Chief Product & Technology Officer, SheerME
+- 2021 – 2025: Chief Product & Technology Officer, Metaphysic.ai. Led ML research, ML engineering and product. Metaphysic was the sole AI VFX provider on Robert Zemeckis' Here (Tom Hanks, Robin Wright) and was named one of TIME's 100 Most Influential Companies of 2023.
+- 2021 – 2023: Founding Member, Blokssom DAO
+- 2018 – 2020: Director of Product & Technology, Indie Campers. Built the technology and product team from 0 to 30 people.
+- 2016 – 2018: VP of Engineering (previously Technical Lead), Streetbees. Scaled tech and product from 0 to 100 people through one of the UK's most successful Series A rounds.
+- 2013 – 2016: Chief Technology & Product Officer, LinkedCare. Designed the microservices architecture for an electronic and personal health record platform and led its expansion into the US market.
+- 2011 – 2013: Founder & CEO, Outitude. Raised a €100k seed round in two weeks for an outdoor-activities marketplace.
+- 2008 – 2011: Web Developer, Project Manager & Scrum Master, RUPEAL. Led tech and product on Besttables from idea to its acquisition by TripAdvisor; also built InvoiceXpress.
+
+## Writing
+
+- [From OpenClaw to Claude Code: Migrating My AI Assistant Setup to Anthropic](https://alexcarvalho.me/blog/from-openclaw-to-claude-code): I spent months building a personal AI assistant with OpenClaw. cron jobs,  Telegram integration, smart home control, the works. Then Claude Code shipped  Channels and I migrated the whole thing in a weekend. Here's how it went. (2026-04-08)
+- ["Making Sure" Is the Hardest Kind of Doing](https://alexcarvalho.me/blog/making-sure-is-the-hardest-kind-of-doing): After 20+ years managing tech product teams, I still struggle to explain what I actually do. The answer always starts with "making sure" — and that never felt like enough. Until I unpacked what it really means. (2026-03-13)
+- [My Homelab Setup: Three Locations, 20+ Services, Zero Cloud Dependencies](https://alexcarvalho.me/blog/my-homelab-setup): I run a multi-site homelab across three locations in Portugal, all connected via Tailscale and managed entirely as code with Ansible. Here's the full breakdown of hardware, services, and lessons learned. (2026-03-10)
+- [Syncing Obsidian Tasks with Apple Reminders... The Hard Way](https://alexcarvalho.me/blog/syncing-obsidian-tasks-with-apple-reminders): I wanted my Obsidian tasks to show up on my watch. Sounds simple, right? It wasn't. Here's how I built a bidirectional sync between Obsidian and Apple Reminders. (2026-03-05)
+- [Are developers missing the mark on using AI?](https://alexcarvalho.me/blog/are-developers-missing-the-mark-on-ai): When used correctly, AI can augment a developer's capacity by orders of magnitude. But here's the problem: many developers aren’t using AI correctly. (2025-01-20)
+- [Most Useful AI-Enhanced Tools for Productivity and Development](https://alexcarvalho.me/blog/ai-tools-for-productivity-and-development): I use AI daily, not only when writing code or more broadly working on product development, but also on almost everything I do while dealing with devices (2025-01-15)
+
+## Work
+
+- [Trend Highlighter](https://alexcarvalho.me/work/farcaster-tredhighlighter): (personal project, archived) Surface the most relevant and trending content from the Farcaster social network.
+- [HERE (tech tools)](https://alexcarvalho.me/work/here-tech-tools): (As Metaphysic CTPO) Metaphysic’s Technical Breakthroughs in the VFX Work of Robert Zemeckis' *Here*.
+- [LinkedCare EHR and PHR](https://alexcarvalho.me/work/linkedcare-ehr-and-phr): (CTPO at LinkedCare) Personal Health Record (PHR) and Electronic Health Record (EHR)
+
+## Optional
+
+- [/ai](https://alexcarvalho.me/ai): My thoughts on AI and how I use it
+- [/blogroll](https://alexcarvalho.me/blogroll): Blogs and websites I read regularly
+- [/canon](https://alexcarvalho.me/canon): Ideas and content that shaped my thinking
+- [/carry](https://alexcarvalho.me/carry): Things I carry every day
+- [/defaults](https://alexcarvalho.me/defaults): Default apps and tools I use
+- [/hello](https://alexcarvalho.me/hello): Get in touch with Alexandre Carvalho for advisory, fractional CTPO work, or AI projects
+- [/ideas](https://alexcarvalho.me/ideas): Project ideas and things I want to build
+- [/interests](https://alexcarvalho.me/interests): Things that fascinate me
+- [/podroll](https://alexcarvalho.me/podroll): Podcasts I listen to regularly
+- [/self-hosting](https://alexcarvalho.me/self-hosting): Services and tools I self-host
+- [/sitemap](https://alexcarvalho.me/sitemap): All pages on this website
+- [/wish](https://alexcarvalho.me/wish): My wishlist of things I'd like

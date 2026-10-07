@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Alexandre Carvalho | Blog</title>
+    <link>https://alexcarvalho.me/blog</link>
+    <atom:link href="https://alexcarvalho.me/feed.xml" rel="self" type="application/rss+xml" />
+    <description>Writing by Alexandre Carvalho on AI, product and engineering leadership.</description>
+    <language>en</language>
+    <lastBuildDate>Wed, 08 Apr 2026 00:00:00 GMT</lastBuildDate>
+    <item>
+      <title>From OpenClaw to Claude Code: Migrating My AI Assistant Setup to Anthropic</title>
+      <link>https://alexcarvalho.me/blog/from-openclaw-to-claude-code</link>
+      <guid isPermaLink="true">https://alexcarvalho.me/blog/from-openclaw-to-claude-code</guid>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <dc:creator>Alexandre Carvalho</dc:creator>
+      <description>I spent months building a personal AI assistant with OpenClaw. cron jobs,  Telegram integration, smart home control, the works. Then Claude Code shipped  Channels and I migrated the whole thing in a weekend. Here&apos;s how it went.</description>
+      <category>AI</category>
+      <category>Claude Code</category>
+      <category>Automation</category>
+      <category>Productivity</category>
+    </item>
+    <item>
+      <title>&quot;Making Sure&quot; Is the Hardest Kind of Doing</title>
+      <link>https://alexcarvalho.me/blog/making-sure-is-the-hardest-kind-of-doing</link>
+      <guid isPermaLink="true">https://alexcarvalho.me/blog/making-sure-is-the-hardest-kind-of-doing</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <dc:creator>Alexandre Carvalho</dc:creator>
+      <description>After 20+ years managing tech product teams, I still struggle to explain what I actually do. The answer always starts with &quot;making sure&quot; — and that never felt like enough. Until I unpacked what it really means.</description>
+      <category>Leadership</category>
+      <category>Management</category>
+      <category>Imposter Syndrome</category>
+      <category>Product Development</category>
+    </item>
+    <item>
+      <title>My Homelab Setup: Three Locations, 20+ Services, Zero Cloud Dependencies</title>
+      <link>https://alexcarvalho.me/blog/my-homelab-setup</link>
+      <guid isPermaLink="true">https://alexcarvalho.me/blog/my-homelab-setup</guid>
+      <pubDate>Tue, 10 Mar 2026 00:00:00 GMT</pubDate>
+      <dc:creator>Alexandre Carvalho</dc:creator>
+      <description>I run a multi-site homelab across three locations in Portugal, all connected via Tailscale and managed entirely as code with Ansible. Here&apos;s the full breakdown of hardware, services, and lessons learned.</description>
+      <category>Homelab</category>
+      <category>Self-hosting</category>
+      <category>Proxmox</category>
+      <category>Ansible</category>
+      <category>Infrastructure</category>
+    </item>
+    <item>
+      <title>Syncing Obsidian Tasks with Apple Reminders... The Hard Way</title>
+      <link>https://alexcarvalho.me/blog/syncing-obsidian-tasks-with-apple-reminders</link>
+      <guid isPermaLink="true">https://alexcarvalho.me/blog/syncing-obsidian-tasks-with-apple-reminders</guid>
+      <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
+      <dc:creator>Alexandre Carvalho</dc:creator>
+      <description>I wanted my Obsidian tasks to show up on my watch. Sounds simple, right? It wasn&apos;t. Here&apos;s how I built a bidirectional sync between Obsidian and Apple Reminders.</description>
+      <category>Obsidian</category>
+      <category>Apple</category>
+      <category>Automation</category>
+      <category>Python</category>
+    </item>
+    <item>
+      <title>Are developers missing the mark on using AI?</title>
+      <link>https://alexcarvalho.me/blog/are-developers-missing-the-mark-on-ai</link>
+      <guid isPermaLink="true">https://alexcarvalho.me/blog/are-developers-missing-the-mark-on-ai</guid>
+      <pubDate>Mon, 20 Jan 2025 00:00:00 GMT</pubDate>
+      <dc:creator>Alexandre Carvalho</dc:creator>
+      <description>When used correctly, AI can augment a developer&apos;s capacity by orders of magnitude. But here&apos;s the problem: many developers aren’t using AI correctly.</description>
+      <category>AI</category>
+      <category>Software Development</category>
+      <category>Developer Productivity</category>
+    </item>
+    <item>
+      <title>Most Useful AI-Enhanced Tools for Productivity and Development</title>
+      <link>https://alexcarvalho.me/blog/ai-tools-for-productivity-and-development</link>
+      <guid isPermaLink="true">https://alexcarvalho.me/blog/ai-tools-for-productivity-and-development</guid>
+      <pubDate>Wed, 15 Jan 2025 00:00:00 GMT</pubDate>
+      <dc:creator>Alexandre Carvalho</dc:creator>
+      <description>I use AI daily, not only when writing code or more broadly working on product development, but also on almost everything I do while dealing with devices</description>
+      <category>Windsurf</category>
+      <category>Obsidian</category>
+      <category>Warp</category>
+    </item>
+  </channel>
+</rss>
