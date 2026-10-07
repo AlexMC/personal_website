@@ -532,7 +532,7 @@ const navigation = [
 
 ### Social Links
 
-Edit `/components/Footer.js` to update social media links.
+Edit `/components/Footer.js` to update social media links. Identity profiles (`sameAs`) live in `/lib/site.mjs`.
 
 ### Easter Eggs
 
@@ -546,6 +546,22 @@ To disable or modify:
 - Remove the `<TraktModal />` and related hooks from `/pages/_app.js`
 - Or change the secret phrase in `/lib/useMatrixCode.js` (default: "thereisnospoon")
 - Requires backend API to be running and configured with Trakt credentials
+
+## SEO, GEO and AEO
+
+Everything search engines and AI answer engines (ChatGPT, Claude, Perplexity, Google AI Overviews) read about the site owner comes from **`/lib/site.mjs`**: name, tagline, summary, meta description, headshot, location, company, education, expertise, profiles and career history. Update facts there, not in individual pages.
+
+- **`/components/Seo.js`**: every page renders it with a title, description and path. It outputs the canonical URL, Open Graph/Twitter tags and a JSON-LD `@graph` that always contains the shared `Person` and `WebSite` entities.
+- **`/lib/schema.js`**: JSON-LD builders (`Person`, `WebSite`, `BlogPosting`, `Article`, `FAQPage`, `BreadcrumbList`). Pages reference the person by `@id` (`https://alexcarvalho.me/#person`) so engines merge facts into one entity.
+- **About page**: bio, career timeline (rendered from `site.career`), and a visible FAQ that is also emitted as `FAQPage` structured data.
+- **`/public/robots.txt`**: allows all crawlers, including AI crawlers, and points to the sitemap.
+- **`/scripts/generate-seo-files.mjs`**: runs automatically after `npm run build` (`postbuild`) and writes `out/sitemap.xml`, `out/feed.xml` (RSS), `out/llms.txt` and the social preview cards from the markdown content.
+- **Social preview cards** (`/scripts/og-image.mjs`): 1200×630 PNGs rendered with `@resvg/resvg-js` and the vendored JetBrains Mono font in `/scripts/fonts` (SIL OFL). `og/default.png` is used by every page without its own image; `og/blog/<slug>.png` is generated for each post that has no `image` front matter.
+- **`/work-with-me`**: the hiring page (fractional CTPO, advisory, AI builds via Abstract Extraordinary) with `Service` and `FAQPage` structured data. Home, About, `/hello` and the footer link to it.
+- Markdown `# ` headings are rendered as `<h2>` so each page keeps a single `<h1>` (the front-matter title).
+- Blog posts can set an optional `updated: 'YYYY-MM-DD'` front-matter field; it feeds `dateModified` and the sitemap `lastmod`.
+- Only projects with `featured: true` appear on the home page; `/work` lists featured projects first.
+- Keep images under ~300 KB. Use a looping `<video autoplay loop muted playsinline>` MP4 instead of animated GIFs.
 
 ## Performance
 

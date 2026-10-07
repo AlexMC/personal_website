@@ -1,55 +1,53 @@
 import Layout from '../../components/Layout'
-import Head from 'next/head'
 import Link from 'next/link'
 import { getMarkdownData, getMarkdownPaths } from '../../lib/markdown'
 import path from 'path'
 import { getImagePath } from '../../lib/utils'
 import BlueskyComments from '../../components/BlueskyComments'
+import Seo from '../../components/Seo'
+import { site, postCardPath } from '../../lib/site.mjs'
+import { blogPostingSchema, breadcrumbSchema } from '../../lib/schema'
 
 export default function BlogPost({ post }) {
   if (!post) return null
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://alexcarvalho.me'
-  const postUrl = `${siteUrl}/blog/${post.slug}`
-  const ogImage = post.image ? `${siteUrl}${getImagePath(post.image)}` : null
+  const postPath = `/blog/${post.slug}`
+  const image = post.image ? getImagePath(post.image) : postCardPath(post.slug)
 
   return (
     <Layout>
-      <Head>
-        {/* Primary Meta Tags */}
-        <title>{post.title} | Alex Carvalho</title>
-        <meta name="title" content={post.title} />
-        <meta name="description" content={post.excerpt} />
-
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={postUrl} />
-        <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.excerpt} />
-        {ogImage && <meta property="og:image" content={ogImage} />}
-
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={postUrl} />
-        <meta property="twitter:title" content={post.title} />
-        <meta property="twitter:description" content={post.excerpt} />
-        {ogImage && <meta property="twitter:image" content={ogImage} />}
-
-        {/* Article specific */}
-        <meta property="article:published_time" content={post.date} />
-        {post.tags && post.tags.map((tag, index) => (
-          <meta key={index} property="article:tag" content={tag} />
-        ))}
-      </Head>
+      <Seo
+        title={post.title}
+        description={post.excerpt}
+        path={postPath}
+        image={image}
+        imageAlt={post.title}
+        type="article"
+        article={{ publishedTime: post.date, modifiedTime: post.updated, tags: post.tags }}
+        schema={[
+          blogPostingSchema({ ...post, image }, postPath),
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Blog', path: '/blog' },
+            { name: post.title, path: postPath },
+          ]),
+        ]}
+      />
       <article className="space-y-8">
         <header className="space-y-4">
           <Link href="/blog" className="text-primary-light hover:text-primary transition-colors">
             &larr; BACK TO BLOG
           </Link>
           <h1 className="text-3xl font-bold text-glow">{post.title}</h1>
-          <div className="flex items-center space-x-4">
-            <time className="text-primary-light">{post.date}</time>
-            <div className="flex gap-2">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <span className="text-primary-light">
+              by{' '}
+              <Link href="/about" rel="author" className="hover:text-primary transition-colors underline">
+                {site.name}
+              </Link>
+            </span>
+            <time dateTime={post.date} className="text-primary-light">{post.date}</time>
+            <div className="flex flex-wrap gap-2">
               {post.tags.map((tag, index) => (
                 <span key={index} className="text-xs px-2 py-1 bg-primary-dark text-primary border border-primary-medium">
                   {tag}

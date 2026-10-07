@@ -1,4 +1,6 @@
-import Head from 'next/head'
+import Link from 'next/link'
+import Seo from '../components/Seo'
+import { site } from '../lib/site.mjs'
 import Layout from '../components/Layout'
 import Projects from '../components/Projects'
 import Tools from '../components/Tools'
@@ -10,17 +12,32 @@ import { getAllMarkdownFiles } from '../lib/markdown'
 export default function Home({ posts, projects, tools }) {
   return (
     <Layout>
-      <Head>
-        <title>Alexandre Carvalho</title>
-        <meta name="description" content="Personal website" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Seo path="/" />
 
       <div className="space-y-32">
-        <section>
-          <p className="text-xl text-primary-light max-w-3xl">
-            I leverage technology to bridge the gap between market needs and business goals, driving maximum value creation and impactful solutions.
+        <section className="space-y-6 text-primary-light max-w-3xl">
+          <p className="text-xl">
+            I&apos;m a Lisbon-based CTPO and AI product &amp; engineering leader. For 20+ years I&apos;ve
+            turned market needs into shipped products, most recently as Chief Product &amp; Technology
+            Officer at Metaphysic.ai, the generative AI company behind the de-aging in Robert
+            Zemeckis&apos; <em>Here</em>.
           </p>
+          <p>
+            Today I run{' '}
+            <a href={site.company.url} className="text-primary hover:text-glow underline">
+              {site.company.name}
+            </a>
+            , a senior engineering studio for AI systems that have to work in production, and take on
+            select advisory and fractional CTPO engagements.
+          </p>
+          <div className="flex flex-wrap gap-8">
+            <Link href="/work-with-me" className="text-primary hover:text-glow transition-colors">
+              WORK WITH ME &rarr;
+            </Link>
+            <Link href="/about" className="text-primary-light hover:text-primary transition-colors">
+              MORE ABOUT ME &rarr;
+            </Link>
+          </div>
         </section>
 
         <section>
@@ -52,7 +69,7 @@ export default function Home({ posts, projects, tools }) {
 
 export async function getStaticProps() {
   const posts = getAllMarkdownFiles('data/posts')
-  const projects = getAllMarkdownFiles('data/projects')
+  const projects = getAllMarkdownFiles('data/projects').filter((project) => project.featured)
   const tools = getAllMarkdownFiles('data/tools')
     .sort((a, b) => (a.order || 0) - (b.order || 0))
 

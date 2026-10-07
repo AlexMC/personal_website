@@ -35,13 +35,13 @@ export default function Footer() {
     <footer className="py-8 border-t border-primary-dark">
       <div className="max-w-3xl mx-auto px-4 text-center">
         <div className="flex justify-center space-x-8 mb-6">
-          <a href="https://github.com/alexmc" target="_blank" rel="noopener noreferrer" className="text-primary-light hover:text-primary transition-colors">
+          <a href="https://github.com/AlexMC" target="_blank" rel="me noopener noreferrer" className="text-primary-light hover:text-primary transition-colors">
             GITHUB
           </a>
-          <a href="https://twitter.com/alexmc" target="_blank" rel="noopener noreferrer" className="text-primary-light hover:text-primary transition-colors">
-            TWITTER
+          <a href="/work-with-me" className="text-primary-light hover:text-primary transition-colors">
+            WORK WITH ME
           </a>
-          <a href="https://www.linkedin.com/in/alexandremcarvalho/" target="_blank" rel="noopener noreferrer" className="text-primary-light hover:text-primary transition-colors">
+          <a href="https://www.linkedin.com/in/alexandremcarvalho/" target="_blank" rel="me noopener noreferrer" className="text-primary-light hover:text-primary transition-colors">
             LINKEDIN
           </a>
         </div>
