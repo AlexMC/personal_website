@@ -3,6 +3,7 @@ import Seo from '../components/Seo'
 import Link from 'next/link'
 import { getMarkdownData, getMarkdownPaths } from '../lib/markdown'
 import path from 'path'
+import { formatDate } from '../lib/utils'
 
 export default function Slashpage({ page }) {
   if (!page) return null
@@ -18,7 +19,7 @@ export default function Slashpage({ page }) {
           <h1 className="text-3xl font-bold text-glow">{page.title}</h1>
           {page.updatedAt && (
             <div className="text-sm text-primary-light">
-              Last updated: {page.updatedAt}
+              Last updated: <time dateTime={page.updatedAt}>{formatDate(page.updatedAt)}</time>
             </div>
           )}
         </header>

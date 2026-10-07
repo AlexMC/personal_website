@@ -2,7 +2,7 @@ import Layout from '../../components/Layout'
 import Link from 'next/link'
 import { getMarkdownData, getMarkdownPaths } from '../../lib/markdown'
 import path from 'path'
-import { getImagePath } from '../../lib/utils'
+import { getImagePath, formatDate } from '../../lib/utils'
 import BlueskyComments from '../../components/BlueskyComments'
 import Seo from '../../components/Seo'
 import { site, cardPath } from '../../lib/site.mjs'
@@ -46,7 +46,7 @@ export default function BlogPost({ post }) {
                 {site.name}
               </Link>
             </span>
-            <time dateTime={post.date} className="text-primary-light">{post.date}</time>
+            <time dateTime={post.date} className="text-primary-light">{formatDate(post.date)}</time>
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag, index) => (
                 <span key={index} className="text-xs px-2 py-1 bg-primary-dark text-primary border border-primary-medium">

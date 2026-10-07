@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { formatDate } from '../lib/utils'
 
 const Slashpages = ({ pages }) => {
   return (
@@ -15,7 +16,7 @@ const Slashpages = ({ pages }) => {
             <p className="text-sm text-primary-light">{page.description}</p>
             {page.updatedAt && (
               <div className="text-xs text-primary-light mt-4">
-                Updated: {page.updatedAt}
+                Updated: <time dateTime={page.updatedAt}>{formatDate(page.updatedAt)}</time>
               </div>
             )}
           </Link>
