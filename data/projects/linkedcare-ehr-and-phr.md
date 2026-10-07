@@ -1,9 +1,14 @@
 ---
-title: "LinkedCare EHR and PHR"
-description: "(CTPO at LinkedCare) Personal Health Record (PHR) and Electronic Health Record (EHR)"
+title: "LinkedCare: Electronic and Personal Health Records, from Lisbon to the US"
+description: "(CTPO at LinkedCare) Led product and engineering for a microservices EHR/PHR platform with real-time clinical decision support, and its expansion from Portugal into the US market."
+company: "LinkedCare"
+role: "Chief Technology & Product Officer"
+period: "2013 – 2016"
+location: "Lisbon, Portugal"
 technologies: ["Ruby", "Rails", "RabbitMQ", "Microservices"]
 image: "/images/linkedcare.png"
 featured: true
+order: 4
 ---
 
 ## Overview

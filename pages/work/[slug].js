@@ -5,12 +5,16 @@ import path from 'path'
 import { getImagePath } from '../../lib/utils';
 import Seo from '../../components/Seo'
 import { projectSchema, breadcrumbSchema } from '../../lib/schema'
+import { cardPath } from '../../lib/site.mjs'
 
 export default function Project({ project }) {
   if (!project) return null
 
   const projectPath = `/work/${project.slug}`
-  const image = project.image ? getImagePath(project.image) : undefined
+  const image = project.image ? getImagePath(project.image) : cardPath('work', project.slug)
+  const context = [project.role && project.company ? `${project.role}, ${project.company}` : project.role, project.period, project.location]
+    .filter(Boolean)
+    .join(' · ')
 
   return (
     <Layout>
@@ -37,8 +41,9 @@ export default function Project({ project }) {
             &larr; BACK TO PROJECTS
           </Link>
           <h1 className="text-3xl font-bold text-glow">{project.title}</h1>
+          {context && <p className="text-primary-light">{context}</p>}
           <div className="flex items-center space-x-4">
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {project.technologies.map((tech, index) => (
                 <span key={index} className="text-xs px-2 py-1 bg-primary-dark text-primary border border-primary-medium">
                   {tech}

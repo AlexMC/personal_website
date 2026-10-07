@@ -69,7 +69,9 @@ export default function Home({ posts, projects, tools }) {
 
 export async function getStaticProps() {
   const posts = getAllMarkdownFiles('data/posts')
-  const projects = getAllMarkdownFiles('data/projects').filter((project) => project.featured)
+  const projects = getAllMarkdownFiles('data/projects')
+    .filter((project) => project.featured)
+    .sort((a, b) => (a.order ?? 99) - (b.order ?? 99))
   const tools = getAllMarkdownFiles('data/tools')
     .sort((a, b) => (a.order || 0) - (b.order || 0))
 

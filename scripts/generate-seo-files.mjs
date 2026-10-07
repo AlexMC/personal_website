@@ -6,8 +6,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
-import { site, absoluteUrl, formatCareerDates, postCardPath } from '../lib/site.mjs'
-import { renderDefaultCard, renderPostCard } from './og-image.mjs'
+import { site, absoluteUrl, formatCareerDates, cardPath } from '../lib/site.mjs'
+import { renderDefaultCard, renderTitleCard } from './og-image.mjs'
 
 const OUT_DIR = path.join(process.cwd(), 'out')
 
@@ -35,7 +35,9 @@ const escapeXml = (value) =>
 const posts = readCollection('data/posts')
   .map((post) => ({ ...post, date: isoDate(post.date), path: `/blog/${post.slug}` }))
   .sort((a, b) => b.date.localeCompare(a.date))
-const projects = readCollection('data/projects').map((project) => ({ ...project, path: `/work/${project.slug}` }))
+const projects = readCollection('data/projects')
+  .map((project) => ({ ...project, path: `/work/${project.slug}` }))
+  .sort((a, b) => (a.order ?? 99) - (b.order ?? 99))
 // /slashes has its own page; pages/[slashpage].js skips the markdown file of the same name.
 const slashpages = readCollection('data/slashpages')
   .filter((page) => page.slug !== 'slashes')
@@ -144,7 +146,15 @@ const files = {
   ...Object.fromEntries(
     posts
       .filter((post) => !post.image)
-      .map((post) => [postCardPath(post.slug), renderPostCard({ title: post.title, date: post.date })]),
+      .map((post) => [cardPath('blog', post.slug), renderTitleCard({ title: post.title, meta: post.date })]),
+  ),
+  ...Object.fromEntries(
+    projects
+      .filter((project) => !project.image)
+      .map((project) => [
+        cardPath('work', project.slug),
+        renderTitleCard({ title: project.title, meta: project.period, label: '> case study' }),
+      ]),
   ),
 }
 for (const [name, content] of Object.entries(files)) {
