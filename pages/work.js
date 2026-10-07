@@ -1,10 +1,24 @@
 import Layout from '../components/Layout'
 import Projects from '../components/Projects'
 import { getAllMarkdownFiles } from '../lib/markdown'
+import Seo from '../components/Seo'
+import { site } from '../lib/site.mjs'
+import { breadcrumbSchema } from '../lib/schema'
 
 export default function Work({ projects }) {
   return (
     <Layout>
+      <Seo
+        title="Work"
+        path="/work"
+        description={`Selected work by ${site.name}: AI VFX tooling for Robert Zemeckis' Here at Metaphysic.ai, the LinkedCare health record platform, and more.`}
+        schema={[
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Work', path: '/work' },
+          ]),
+        ]}
+      />
       <div className="space-y-32">
         <section>
           <p className="text-xl text-primary-light">
@@ -13,7 +27,7 @@ export default function Work({ projects }) {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mb-12 text-primary">&gt; projects</h2>
+          <h1 className="text-2xl font-bold mb-12 text-primary">&gt; projects</h1>
           <Projects projects={projects} />
         </section>
       </div>
@@ -22,7 +36,9 @@ export default function Work({ projects }) {
 }
 
 export async function getStaticProps() {
-  const projects = await getAllMarkdownFiles('data/projects')
-  
+  // Featured projects first; archived side projects after.
+  const projects = getAllMarkdownFiles('data/projects')
+    .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)))
+
   return { props: { projects } }
 }

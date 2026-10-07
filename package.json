@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "NODE_NO_WARNINGS=1 next dev",
     "build": "NODE_NO_WARNINGS=1 next build",
+    "postbuild": "node scripts/generate-seo-files.mjs",
     "start": "NODE_NO_WARNINGS=1 next start",
     "lint": "next lint",
     "share-to-bluesky": "node scripts/auto-share-to-bluesky.js"
@@ -23,6 +24,7 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/typography": "^0.5.10",
     "autoprefixer": "^10.4.16",
     "dotenv": "^17.2.3",

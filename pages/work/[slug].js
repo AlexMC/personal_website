@@ -3,12 +3,34 @@ import Link from 'next/link'
 import { getMarkdownData, getMarkdownPaths } from '../../lib/markdown'
 import path from 'path'
 import { getImagePath } from '../../lib/utils';
+import Seo from '../../components/Seo'
+import { projectSchema, breadcrumbSchema } from '../../lib/schema'
 
 export default function Project({ project }) {
   if (!project) return null
 
+  const projectPath = `/work/${project.slug}`
+  const image = project.image ? getImagePath(project.image) : undefined
+
   return (
     <Layout>
+      <Seo
+        title={project.title}
+        description={project.description}
+        path={projectPath}
+        image={image}
+        imageAlt={project.title}
+        type="article"
+        article={{ tags: project.technologies }}
+        schema={[
+          projectSchema({ ...project, image }, projectPath),
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Work', path: '/work' },
+            { name: project.title, path: projectPath },
+          ]),
+        ]}
+      />
       <article className="space-y-8">
         <header className="space-y-4">
           <Link href="/work" className="text-primary-light hover:text-primary transition-colors">
@@ -63,6 +85,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const filePath = path.join(process.cwd(), 'data/projects', `${params.slug}.md`)
   const project = await getMarkdownData(filePath)
-  
+  project.slug = params.slug
+
   return { props: { project } }
 }

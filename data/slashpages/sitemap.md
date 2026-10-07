@@ -2,7 +2,7 @@
 title: "/sitemap"
 slug: "sitemap"
 description: "All pages on this website"
-updatedAt: '2025-01-12'
+updatedAt: '2026-10-07'
 order: 11
 ---
 
@@ -14,6 +14,7 @@ order: 11
 - [Work](/work) - Projects and portfolio
 - [Blog](/blog) - Writing and articles
 - [About](/about) - About me
+- [Work With Me](/work-with-me) - Fractional CTPO, advisory and AI builds
 
 ## Slashpages
 

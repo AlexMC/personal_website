@@ -1,29 +1,16 @@
 import Layout from '../components/Layout'
-import Head from 'next/head'
+import Seo from '../components/Seo'
 import Slashpages from '../components/Slashpages'
 import { getAllMarkdownFiles } from '../lib/markdown'
 
 export default function Slashes({ pages }) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://alexcarvalho.me'
-  const pageUrl = `${siteUrl}/slashes`
-
   return (
     <Layout>
-      <Head>
-        <title>/slashes | Alex Carvalho</title>
-        <meta name="title" content="/slashes | Alex Carvalho" />
-        <meta name="description" content="A collection of slashpages - standardized pages about me and my interests" />
-
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={pageUrl} />
-        <meta property="og:title" content="/slashes | Alex Carvalho" />
-        <meta property="og:description" content="A collection of slashpages - standardized pages about me and my interests" />
-
-        <meta property="twitter:card" content="summary" />
-        <meta property="twitter:url" content={pageUrl} />
-        <meta property="twitter:title" content="/slashes | Alex Carvalho" />
-        <meta property="twitter:description" content="A collection of slashpages - standardized pages about me and my interests" />
-      </Head>
+      <Seo
+        title="/slashes"
+        path="/slashes"
+        description="A collection of slashpages: standardized pages about me, my interests, and the things I use."
+      />
       <div className="space-y-12">
         <section className="space-y-6">
           <h1 className="text-3xl font-bold text-glow">&gt; slashpages</h1>

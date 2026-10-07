@@ -1,5 +1,5 @@
 import Layout from '../components/Layout'
-import Head from 'next/head'
+import Seo from '../components/Seo'
 import Link from 'next/link'
 import { getMarkdownData, getMarkdownPaths } from '../lib/markdown'
 import path from 'path'
@@ -7,29 +7,9 @@ import path from 'path'
 export default function Slashpage({ page }) {
   if (!page) return null
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://alexcarvalho.me'
-  const pageUrl = `${siteUrl}/${page.slug}`
-
   return (
     <Layout>
-      <Head>
-        {/* Primary Meta Tags */}
-        <title>{page.title} | Alex Carvalho</title>
-        <meta name="title" content={page.title} />
-        <meta name="description" content={page.description} />
-
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={pageUrl} />
-        <meta property="og:title" content={page.title} />
-        <meta property="og:description" content={page.description} />
-
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary" />
-        <meta property="twitter:url" content={pageUrl} />
-        <meta property="twitter:title" content={page.title} />
-        <meta property="twitter:description" content={page.description} />
-      </Head>
+      <Seo title={page.title} description={page.description} path={`/${page.slug}`} />
       <article className="space-y-8">
         <header className="space-y-4">
           <Link href="/slashes" className="text-primary-light hover:text-primary transition-colors">
