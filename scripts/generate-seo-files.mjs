@@ -106,6 +106,7 @@ function llmsTxt() {
     `- Profiles: ${site.sameAs.join(', ')}`,
     `- Hiring (fractional CTPO, advisory, AI builds): ${absoluteUrl('/work-with-me')}`,
     `- Contact: ${absoluteUrl('/hello')}`,
+    `- Company: ${site.company.name}, ${site.company.url} (LinkedIn: ${site.company.sameAs.join(', ')})`,
     '',
     '## About',
     '',
