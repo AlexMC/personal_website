@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Layout from '../components/Layout'
 import Seo from '../components/Seo'
 import { site, absoluteUrl } from '../lib/site.mjs'
-import { PERSON_ID, faqSchema, breadcrumbSchema } from '../lib/schema'
+import { PERSON_ID, companySchema, faqSchema, breadcrumbSchema } from '../lib/schema'
 
 const offers = [
   {
@@ -63,10 +63,7 @@ export default function WorkWithMe() {
             serviceType: offer.name,
             description: offer.description,
             url: absoluteUrl('/work-with-me'),
-            provider:
-              offer.provider === 'person'
-                ? { '@id': PERSON_ID }
-                : { '@type': 'Organization', name: site.company.name, url: site.company.url, founder: { '@id': PERSON_ID } },
+            provider: offer.provider === 'person' ? { '@id': PERSON_ID } : companySchema(),
           })),
           faqSchema(faq),
           breadcrumbSchema([
