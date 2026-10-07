@@ -23,11 +23,11 @@ Alexandre Carvalho (also known as Alex Carvalho) is based in Lisbon, Portugal. H
 - 2020 – 2025: Advisor / Chief Product & Technology Officer, SheerME
 - 2021 – 2025: Chief Product & Technology Officer, Metaphysic.ai. Led ML research, ML engineering and product. Metaphysic was the sole AI VFX provider on Robert Zemeckis' Here (Tom Hanks, Robin Wright) and was named one of TIME's 100 Most Influential Companies of 2023.
 - 2021 – 2023: Founding Member, Blokssom DAO
-- 2018 – 2020: Director of Product & Technology, Indie Campers. Built the technology and product team from 0 to 30 people.
-- 2016 – 2018: VP of Engineering (previously Technical Lead), Streetbees. Scaled tech and product from 0 to 100 people through one of the UK's most successful Series A rounds.
+- 2018 – 2020: Director of Product & Technology, Indie Campers. Built the in-house technology and product team from 0 to 30 people and the digital platform behind a fleet that grew from 650 to 1,200+ vans in 15 countries.
+- 2016 – 2018: VP of Engineering (previously Technical Lead), Streetbees. Built the engineering team as the company grew from ~20 to ~75 people across London and Lisbon, through a $5.1M seed and a $12M Series A led by Atomico.
 - 2013 – 2016: Chief Technology & Product Officer, LinkedCare. Designed the microservices architecture for an electronic and personal health record platform and led its expansion into the US market.
 - 2011 – 2013: Founder & CEO, Outitude. Raised a €100k seed round in two weeks for an outdoor-activities marketplace.
-- 2008 – 2011: Web Developer, Project Manager & Scrum Master, RUPEAL. Led tech and product on Besttables from idea to its acquisition by TripAdvisor; also built InvoiceXpress.
+- 2008 – 2011: Web Developer, Project Manager & Scrum Master, RUPEAL. Helped win and led the team that built Besttables, a real-time restaurant booking platform, from proposal to launch; TripAdvisor acquired it in 2015. Also worked on InvoiceXpress.
 
 ## Writing
 
@@ -40,9 +40,12 @@ Alexandre Carvalho (also known as Alex Carvalho) is based in Lisbon, Portugal. H
 
 ## Work
 
+- [Here: Real-Time AI De-Aging for Robert Zemeckis' Film](https://alexcarvalho.me/work/here-tech-tools): (CPTO at Metaphysic.ai) Led the ML research, engineering and product teams behind the AI face replacement and de-aging of Tom Hanks and Robin Wright in Robert Zemeckis' *Here*.
+- [Streetbees: Scaling Engineering Through a $12M Series A](https://alexcarvalho.me/work/streetbees): (VP of Engineering at Streetbees) Built and scaled the engineering team behind a consumer-insights platform used by Unilever, PepsiCo and Coca-Cola, from seed to an Atomico-led Series A.
+- [Indie Campers: Building Tech and Product from Zero at Portugal's Fastest-Growing Company](https://alexcarvalho.me/work/indie-campers): (Director of Product & Technology at Indie Campers) Built the in-house tech and product team from 0 to 30 and the fully digital platform behind a fleet that grew from 650 to 1,200+ vans in 15 countries.
+- [LinkedCare: Electronic and Personal Health Records, from Lisbon to the US](https://alexcarvalho.me/work/linkedcare-ehr-and-phr): (CTPO at LinkedCare) Led product and engineering for a microservices EHR/PHR platform with real-time clinical decision support, and its expansion from Portugal into the US market.
+- [Besttables: Building the Restaurant Booking Platform TripAdvisor Later Acquired](https://alexcarvalho.me/work/besttables): (Team lead at RUPEAL) Won the build and led the team that took Besttables, Portugal's real-time restaurant booking platform, from proposal to launch. TripAdvisor acquired it in 2015.
 - [Trend Highlighter](https://alexcarvalho.me/work/farcaster-tredhighlighter): (personal project, archived) Surface the most relevant and trending content from the Farcaster social network.
-- [HERE (tech tools)](https://alexcarvalho.me/work/here-tech-tools): (As Metaphysic CTPO) Metaphysic’s Technical Breakthroughs in the VFX Work of Robert Zemeckis' *Here*.
-- [LinkedCare EHR and PHR](https://alexcarvalho.me/work/linkedcare-ehr-and-phr): (CTPO at LinkedCare) Personal Health Record (PHR) and Electronic Health Record (EHR)
 
 ## Optional
 
