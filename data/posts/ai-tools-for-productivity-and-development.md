@@ -1,8 +1,8 @@
 ---
-title: Most usefull AI enhanced tools for productivity and development.
+title: Most Useful AI-Enhanced Tools for Productivity and Development
 date: '2025-01-15'
 excerpt: >-
-  I use AI daily, not only when writting code or more broadly working on product
+  I use AI daily, not only when writing code or more broadly working on product
   development, but also on almost everything I do while dealing with devices
 tags:
   - Windsurf
@@ -41,7 +41,7 @@ The plugin responds with:
 - Detailed references from your notes.
 - Suggested changes you can apply with a single click.
 
-![Obsidian+Smart-Composer](/images/smart-composer.gif)
+<video src="/images/smart-composer.mp4" autoplay loop muted playsinline width="1200" height="660" aria-label="Obsidian with the Smart Composer plugin answering from personal notes"></video>
 
 **Why is it relevant?** It brings your personal context into the AI equation, making knowledge retrieval and management effortless.
 

@@ -1,8 +1,8 @@
 ---
 title: "/hello"
 slug: "hello"
-description: "Say hello and get in touch"
-updatedAt: '2025-11-12'
+description: "Get in touch with Alexandre Carvalho for advisory, fractional CTPO work, or AI projects"
+updatedAt: '2026-10-07'
 order: 6
 ---
 
@@ -14,7 +14,7 @@ Want to chat? Here's how to reach me.
 
 ### Email
 
-- alexandre.carvallho [at] gmail.com
+- alexandre.carvalho [at] gmail.com
 
 ### Social
 
@@ -22,6 +22,13 @@ Want to chat? Here's how to reach me.
 - **Mastodon:** [@alexmc@mastodon.social](https://mastodon.social/@alexmc)
 - **GitHub:** [github.com/alexmc](https://github.com/alexmc)
 - **LinkedIn:** [linkedin.com/in/alexandremcarvalho](https://www.linkedin.com/in/alexandremcarvalho/)
+
+### Work With Me
+
+- **Advisory and fractional CTPO:** AI product strategy, building and scaling tech and product teams, and turning generative AI demos into products.
+- **AI systems built for production:** through my studio, [Abstract Extraordinary](https://abstractextraordinary.com/).
+
+More on formats and track record: [Work with me](/work-with-me).
 
 ### What to Contact Me About
 
