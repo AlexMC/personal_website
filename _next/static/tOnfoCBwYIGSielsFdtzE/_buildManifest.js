@@ -1,36 +1,36 @@
 self.__BUILD_MANIFEST = {
   "/": [
-    "static/chunks/0jcd0jqiiul4e.js"
+    "static/chunks/07folv5qw.3va.js"
   ],
   "/[slashpage]": [
-    "static/chunks/05sw2q2obe8hv.js"
+    "static/chunks/0rjrxc-i3pgjr.js"
   ],
   "/_error": [
     "static/chunks/0aod4nzv1sakw.js"
   ],
   "/about": [
-    "static/chunks/0a.li72fi80.r.js"
+    "static/chunks/0klz1jygqw8v0.js"
   ],
   "/blog": [
-    "static/chunks/0je8pv~l_d1.w.js"
+    "static/chunks/0a8car2vphrf8.js"
   ],
   "/blog/[slug]": [
-    "static/chunks/13el3jozktpqh.js"
+    "static/chunks/03wmopbp4um5m.js"
   ],
   "/slashes": [
-    "static/chunks/0sbnvcb4uulc4.js"
+    "static/chunks/0lp_xq2e7lthw.js"
   ],
   "/tools": [
-    "static/chunks/171wrv~56ue.6.js"
+    "static/chunks/110o89s4yw2pg.js"
   ],
   "/work": [
-    "static/chunks/00toz.bil6er0.js"
+    "static/chunks/10z8ibdt-k436.js"
   ],
   "/work-with-me": [
-    "static/chunks/0~mlrbj~kj9ha.js"
+    "static/chunks/0iasu_m7xljkw.js"
   ],
   "/work/[slug]": [
-    "static/chunks/085hq0kiymxq7.js"
+    "static/chunks/0f_8w4xt3xzmd.js"
   ],
   "__rewrites": {
     "afterFiles": [],
