@@ -29,10 +29,10 @@ BING_SITE = "https://alexcarvalho.me/"
 OPENAI_MODEL = "gpt-6-luna"
 JUDGE_MODEL = "gpt-6-luna"
 PERPLEXITY_PRESET = "fast"
-# From the Cloudflare Access application (see README). Until both are set,
-# every request is refused.
-ACCESS_TEAM_DOMAIN = ""
-ACCESS_AUD = ""
+# From the Cloudflare Access application "Insights" (see README). If either is
+# emptied, every request is refused.
+ACCESS_TEAM_DOMAIN = "https://alexmc.cloudflareaccess.com"
+ACCESS_AUD = "7ea8500e6d4539b3b5e9bbc9671971a3062974f52ceaac517d56519017a40317"
 
 # Secrets, set with `npx wrangler secret put <NAME>` (all optional; each
 # source is skipped until its secret exists):
