@@ -21,12 +21,16 @@ export async function syncSearch(env: Env, { backfill = false } = {}): Promise<S
 
   if (env.GSC_SERVICE_ACCOUNT) {
     try {
-      const details: string[] = [];
       const span = backfill ? GOOGLE_BACKFILL_DAYS : SEARCH_REFRESH_DAYS;
-      for (let from = span; from > 0; from -= 30) {
-        details.push(await collectGoogle(env, daysAgo(from), daysAgo(Math.max(from - 29, 1))));
-      }
-      results.push({ job: 'google', ok: true, detail: details.join('; ') });
+      const ranges: [string, string][] = [];
+      for (let from = span; from > 0; from -= 30) ranges.push([daysAgo(from), daysAgo(Math.max(from - 29, 1))]);
+      const { days, rows } = await collectGoogle(env, ranges);
+      const period = `${ranges[0][0]}..${ranges[ranges.length - 1][1]}`;
+      const detail =
+        days === 0
+          ? `${period}: connected, but Google has no data for this period yet (a newly added property can take up to a week)`
+          : `${period}: ${days} days, ${rows} query rows`;
+      results.push({ job: 'google', ok: true, detail });
     } catch (e) {
       results.push({ job: 'google', ok: false, detail: errorMessage(e) });
     }

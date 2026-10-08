@@ -1,6 +1,6 @@
 import type { Env } from './env';
 import { upsertRows, upsertTotals } from './store';
-import { parseBingDate } from './util';
+import { fetchRetrying, parseBingDate } from './util';
 
 // Bing Webmaster API. Neither call takes a date range: each returns all the
 // history Bing holds (about six months), so every sync simply upserts it all.
@@ -20,9 +20,14 @@ interface QueryStat extends TrafficStat {
 
 async function call<T>(env: Env, method: string): Promise<T[]> {
   const params = new URLSearchParams({ siteUrl: env.BING_SITE, apikey: env.BING_API_KEY ?? '' });
-  const res = await fetch(`${BASE}/${method}?${params}`);
-  if (!res.ok) throw new Error(`Bing ${method} failed (${res.status}): ${await res.text()}`);
-  const { d } = (await res.json()) as { d: T[] | null };
+  // Bing answers short bursts with HTTP 400 "ThrottleIP"; it clears within seconds to minutes.
+  const res = await fetchRetrying(
+    () => fetch(`${BASE}/${method}?${params}`),
+    (status, body) => body.includes('ThrottleIP') || status >= 500,
+    [15_000, 45_000],
+  );
+  if (!res.ok) throw new Error(`Bing ${method} failed (${res.status}): ${res.body}`);
+  const { d } = JSON.parse(res.body) as { d: T[] | null };
   return d ?? [];
 }
 

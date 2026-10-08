@@ -1,7 +1,45 @@
 import { describe, expect, it } from 'vitest';
 import { brandRecognition, type AnswerRow, type RunSummary } from '../src/data';
 import { parseOpenAI, parsePerplexity } from '../src/engines';
-import { citesOwnSite, isBrandQuery, ownSourceLabel, parseBingDate, uniqueUrls, weekStart } from '../src/util';
+import {
+  citesOwnSite,
+  fetchRetrying,
+  isBrandQuery,
+  ownSourceLabel,
+  parseBingDate,
+  uniqueUrls,
+  weekStart,
+} from '../src/util';
+
+describe('fetchRetrying', () => {
+  const sequence = (...responses: [number, string][]) => {
+    let calls = 0;
+    const request = async () => {
+      const [status, body] = responses[Math.min(calls++, responses.length - 1)];
+      return new Response(body, { status });
+    };
+    return { request, calls: () => calls };
+  };
+  const rateLimited = (status: number) => status === 429;
+
+  it('retries transient failures and returns the eventual success', async () => {
+    const s = sequence([429, 'slow down'], [429, 'slow down'], [200, 'ok']);
+    expect(await fetchRetrying(s.request, rateLimited, [0, 0])).toEqual({ status: 200, ok: true, body: 'ok' });
+    expect(s.calls()).toBe(3);
+  });
+
+  it('gives up after the last delay and returns the final failure', async () => {
+    const s = sequence([429, 'slow down']);
+    expect(await fetchRetrying(s.request, rateLimited, [0, 0])).toMatchObject({ status: 429, ok: false });
+    expect(s.calls()).toBe(3);
+  });
+
+  it('does not retry permanent failures', async () => {
+    const s = sequence([401, 'bad key']);
+    expect(await fetchRetrying(s.request, rateLimited, [0, 0])).toMatchObject({ status: 401 });
+    expect(s.calls()).toBe(1);
+  });
+});
 
 describe('parseBingDate', () => {
   it('reads plain and offset WCF dates as the bucket date', () => {

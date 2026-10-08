@@ -1,5 +1,5 @@
 import type { Env } from './env';
-import { uniqueUrls } from './util';
+import { fetchRetrying, uniqueUrls } from './util';
 
 // Each engine is asked the tracked prompt verbatim, with web search on and no
 // system instructions, so the answer is as close as the API gets to what a
@@ -70,15 +70,18 @@ export function parsePerplexity(body: ResponsesBody): Omit<EngineAnswer, 'model'
 }
 
 async function post(url: string, apiKey: string, payload: unknown): Promise<ResponsesBody> {
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { authorization: `Bearer ${apiKey}`, 'content-type': 'application/json' },
-    body: JSON.stringify(payload),
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-  });
-  const text = await res.text();
-  if (!res.ok) throw new Error(`${new URL(url).hostname} ${res.status}: ${text.slice(0, 500)}`);
-  const body = JSON.parse(text) as ResponsesBody;
+  const res = await fetchRetrying(
+    () =>
+      fetch(url, {
+        method: 'POST',
+        headers: { authorization: `Bearer ${apiKey}`, 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      }),
+    (status) => status === 429 || status >= 500,
+  );
+  if (!res.ok) throw new Error(`${new URL(url).hostname} ${res.status}: ${res.body.slice(0, 500)}`);
+  const body = JSON.parse(res.body) as ResponsesBody;
   if (body.error?.message) throw new Error(body.error.message);
   return body;
 }

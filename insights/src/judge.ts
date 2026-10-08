@@ -39,8 +39,8 @@ const INSTRUCTIONS = `You audit what an AI assistant's answer says about one spe
 FACTS describes him: Alexandre Carvalho, the Lisbon-based CTPO. Other people share that name (for example academics, athletes or other business people); they are not him.
 
 Return:
-- identity: "correct" if the answer refers to this person and describes him in a way consistent with FACTS; "wrong_person" if it presents a different Alexandre Carvalho as him, or mixes his details with another person's; "not_mentioned" if it does not refer to him at all.
-- issues: every statement about him, or about his company Abstract Extraordinary, that contradicts FACTS or is not supported by them (wrong employer, role, dates, location, achievements). Quote the claim briefly and say what is wrong. Ignore statements about other people and companies. Do not report omissions. Use an empty list when there are none.`;
+- identity: whether the answer refers to HIM, the person. "correct" if it names him and describes him in a way consistent with FACTS; "wrong_person" if it presents a different Alexandre Carvalho as him, or mixes his details with another person's; "not_mentioned" if he is not named. An answer that only describes his company, without naming him, is "not_mentioned".
+- issues: statements about him, or about his company Abstract Extraordinary, that CONTRADICT FACTS: a wrong employer, role or title, dates, location, company name or achievement. Quote the claim briefly and say what FACTS says instead. Do not report claims that FACTS simply does not cover; they may well be true. Ignore statements about other people and companies. Do not report omissions. Use an empty list when there are none.`;
 
 const SCHEMA = {
   type: 'object',

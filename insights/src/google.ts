@@ -63,28 +63,38 @@ async function queryAll(
   }
 }
 
-export async function collectGoogle(env: Env, startDate: string, endDate: string): Promise<string> {
+export interface GoogleCounts {
+  days: number;
+  rows: number;
+}
+
+/** Fetch and store each [startDate, endDate] range; returns how much data Google had. */
+export async function collectGoogle(env: Env, ranges: [string, string][]): Promise<GoogleCounts> {
   if (!env.GSC_SERVICE_ACCOUNT) throw new Error('GSC_SERVICE_ACCOUNT secret is not set');
   const token = await accessToken(JSON.parse(env.GSC_SERVICE_ACCOUNT) as ServiceAccount);
+  const counts: GoogleCounts = { days: 0, rows: 0 };
 
-  const totals: SearchTotal[] = (await queryAll(token, env.GSC_SITE, startDate, endDate, ['date'])).map((r) => ({
-    date: r.keys[0],
-    clicks: r.clicks,
-    impressions: r.impressions,
-    position: r.position,
-  }));
-  const rows: SearchRow[] = (
-    await queryAll(token, env.GSC_SITE, startDate, endDate, ['date', 'query', 'page'])
-  ).map((r) => ({
-    date: r.keys[0],
-    query: r.keys[1],
-    page: r.keys[2],
-    clicks: r.clicks,
-    impressions: r.impressions,
-    position: r.position,
-  }));
-
-  await upsertTotals(env, 'google', totals);
-  await upsertRows(env, 'google', rows);
-  return `${startDate}..${endDate}: ${totals.length} days, ${rows.length} query rows`;
+  for (const [startDate, endDate] of ranges) {
+    const totals: SearchTotal[] = (await queryAll(token, env.GSC_SITE, startDate, endDate, ['date'])).map((r) => ({
+      date: r.keys[0],
+      clicks: r.clicks,
+      impressions: r.impressions,
+      position: r.position,
+    }));
+    const rows: SearchRow[] = (
+      await queryAll(token, env.GSC_SITE, startDate, endDate, ['date', 'query', 'page'])
+    ).map((r) => ({
+      date: r.keys[0],
+      query: r.keys[1],
+      page: r.keys[2],
+      clicks: r.clicks,
+      impressions: r.impressions,
+      position: r.position,
+    }));
+    await upsertTotals(env, 'google', totals);
+    await upsertRows(env, 'google', rows);
+    counts.days += totals.length;
+    counts.rows += rows.length;
+  }
+  return counts;
 }
