@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { brandRecognition, type AnswerRow, type RunSummary } from '../src/data';
+import { answerShare, type AnswerRow, type RunSummary } from '../src/data';
 import { parseOpenAI, parsePerplexity } from '../src/engines';
 import {
-  citesOwnSite,
+  citesSource,
   fetchRetrying,
   isBrandQuery,
   ownSourceLabel,
@@ -77,9 +77,10 @@ describe('own sources', () => {
     expect(ownSourceLabel('https://notalexcarvalho.me/')).toBeNull();
   });
 
-  it('counts only the personal site as citing the site', () => {
-    expect(citesOwnSite(['https://abstractextraordinary.com/'])).toBe(false);
-    expect(citesOwnSite(['https://example.com', 'https://alexcarvalho.me/'])).toBe(true);
+  it('tells the personal site and the company site apart', () => {
+    const sources = ['https://example.com', 'https://www.abstractextraordinary.com/blog/'];
+    expect(citesSource(sources, 'Abstract Extraordinary')).toBe(true);
+    expect(citesSource(sources, 'alexcarvalho.me')).toBe(false);
   });
 });
 
@@ -134,40 +135,54 @@ describe('engine responses', () => {
   });
 });
 
-describe('brandRecognition', () => {
+describe('answerShare', () => {
   const answer = (over: Partial<AnswerRow>): AnswerRow => ({
     id: 1,
     run_id: 1,
     engine: 'chatgpt',
     model: null,
-    prompt_id: 'who',
+    prompt_id: 'pilot-who-can-help',
     prompt: '',
     answer: '',
     sources: [],
-    identity: 'correct',
+    identity: 'not_mentioned',
+    company_named: false,
     issues: [],
     cites_own: false,
+    cites_company: false,
     error: null,
     created_at: '',
     ...over,
   });
+  const run = (answers: AnswerRow[]): RunSummary => ({ id: 1, started_at: '', finished_at: null, trigger: 'manual', answers });
+  const named = (a: AnswerRow) => a.company_named === true;
+  const graded = (a: AnswerRow) => a.company_named !== null;
 
-  it('scores only graded brand prompts for the engine', () => {
-    const run: RunSummary = {
-      id: 1,
-      started_at: '',
-      finished_at: null,
-      trigger: 'manual',
-      answers: [
-        answer({ prompt_id: 'who', identity: 'correct' }),
-        answer({ prompt_id: 'metaphysic', identity: 'wrong_person' }),
-        answer({ prompt_id: 'streetbees', identity: null, error: 'timeout' }), // failed: not counted
-        answer({ prompt_id: 'fractional-ctpo', identity: 'not_mentioned' }), // topic prompt: not counted
-        answer({ engine: 'perplexity', prompt_id: 'who', identity: 'not_mentioned' }),
-      ],
-    };
-    expect(brandRecognition(run, 'chatgpt')).toBe(0.5);
-    expect(brandRecognition(run, 'perplexity')).toBe(0);
-    expect(brandRecognition(run, 'gemini')).toBeNull();
+  it('measures the company on target questions only, per engine', () => {
+    const r = run([
+      answer({ prompt_id: 'pilot-who-can-help', company_named: true }),
+      answer({ prompt_id: 'pilot-cost', company_named: false }),
+      answer({ prompt_id: 'abstract-extraordinary', company_named: true }), // company question: not a target
+      answer({ prompt_id: 'who', company_named: true }), // brand question: not a target
+      answer({ engine: 'perplexity', prompt_id: 'pilot-cost', company_named: true }),
+    ]);
+    expect(answerShare(r, 'chatgpt', 'target', named, graded)).toBe(0.5);
+    expect(answerShare(r, 'perplexity', 'target', named, graded)).toBe(1);
+    expect(answerShare(r, 'gemini', 'target', named, graded)).toBeNull();
+  });
+
+  it('leaves out failed answers and answers graded before the field existed', () => {
+    const r = run([
+      answer({ prompt_id: 'pilot-who-can-help', company_named: true }),
+      answer({ prompt_id: 'pilot-cost', company_named: null, error: 'timeout' }),
+      answer({ prompt_id: 'pilot-why-fail', company_named: null }), // old run, not graded for this
+      answer({ prompt_id: 'retired-prompt', company_named: false }), // no longer tracked
+    ]);
+    expect(answerShare(r, 'chatgpt', 'target', named, graded)).toBe(1);
+  });
+
+  it('scores Alexandre on the brand question', () => {
+    const r = run([answer({ prompt_id: 'who', identity: 'correct' }), answer({ prompt_id: 'pilot-cost', identity: 'wrong_person' })]);
+    expect(answerShare(r, 'chatgpt', 'brand', (a) => a.identity === 'correct')).toBe(1);
   });
 });

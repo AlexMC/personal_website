@@ -3,7 +3,7 @@ import { ENGINES } from './engines';
 import type { Env } from './env';
 import { judge } from './judge';
 import { logJob } from './store';
-import { citesOwnSite, errorMessage, mapLimit } from './util';
+import { citesSource, errorMessage, mapLimit } from './util';
 
 // One run = every tracked prompt asked to every engine that has an API key,
 // each answer graded and stored. A failure on one pair is recorded on that
@@ -29,8 +29,8 @@ export async function runAiCheck(env: Env, trigger: 'cron' | 'manual'): Promise<
       const reply = await engine.ask(env, prompt.text);
       const verdict = await judge(env, prompt.text, reply.answer);
       await env.DB.prepare(
-        `INSERT INTO ai_answers (run_id, engine, model, prompt_id, prompt, answer, sources, identity, issues, cites_own, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO ai_answers (run_id, engine, model, prompt_id, prompt, answer, sources, identity, company_named, issues, cites_own, cites_company, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
         .bind(
           run.id,
@@ -41,8 +41,10 @@ export async function runAiCheck(env: Env, trigger: 'cron' | 'manual'): Promise<
           reply.answer,
           JSON.stringify(reply.sources),
           verdict.identity,
+          verdict.company_named ? 1 : 0,
           JSON.stringify(verdict.issues),
-          citesOwnSite(reply.sources) ? 1 : 0,
+          citesSource(reply.sources, 'alexcarvalho.me') ? 1 : 0,
+          citesSource(reply.sources, 'Abstract Extraordinary') ? 1 : 0,
           now,
         )
         .run();

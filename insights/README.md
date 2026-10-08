@@ -9,9 +9,12 @@ alexcarvalho.me ranks over time:
   Search Console's 16-month window.
 - **AI answers**: every prompt in `src/config.ts` is asked to ChatGPT and
   Perplexity through their APIs with web search on, weekly (Mondays 07:00 UTC).
-  Each answer is graded against `../lib/site.mjs`, the same facts the website
-  publishes: does it name the right Alexandre Carvalho, does it cite the site,
-  and which claims are wrong.
+  Most prompts are `target` buyer questions from the Abstract Extraordinary
+  visibility plan; the headline metric is the share of those answers that
+  **name Abstract Extraordinary**, and how many cite abstractextraordinary.com.
+  Each answer is also graded against `../lib/site.mjs`, the same facts the
+  website publishes: does it name the right Alexandre Carvalho, does it cite
+  alexcarvalho.me, and which claims are wrong.
 
 A Cloudflare Worker (Hono) with a D1 database. Pages are server-rendered HTML
 with inline SVG charts; no client JavaScript.

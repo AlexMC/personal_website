@@ -4,17 +4,30 @@
 export interface TrackedPrompt {
   id: string;
   text: string;
-  /** brand: should name Alexandre. company: about Abstract Extraordinary. topic: open market questions. */
-  kind: 'brand' | 'company' | 'topic';
+  /**
+   * brand: should name Alexandre. company: about Abstract Extraordinary.
+   * target: buyer questions Abstract Extraordinary wants to be named in (the
+   * success metric of the visibility plan).
+   */
+  kind: 'brand' | 'company' | 'target';
 }
 
 export const PROMPTS: TrackedPrompt[] = [
-  { id: 'who', text: 'Who is Alexandre Carvalho, CTPO?', kind: 'brand' },
-  { id: 'metaphysic', text: 'Who was the CPTO of Metaphysic.ai?', kind: 'brand' },
-  { id: 'streetbees', text: 'Who led engineering at Streetbees?', kind: 'brand' },
+  { id: 'pilot-who-can-help', text: 'Who can help take our AI pilot to production?', kind: 'target' },
+  {
+    id: 'pilot-companies-midsize',
+    text: 'Companies that help mid-size businesses move generative AI from proof of concept to production',
+    kind: 'target',
+  },
+  { id: 'pilot-why-fail', text: 'Why do AI pilots fail to reach production, and how do you fix it?', kind: 'target' },
+  { id: 'pilot-cost', text: 'How much does it cost to take a GenAI pilot to production?', kind: 'target' },
+  {
+    id: 'knowledge-assistant-partner',
+    text: 'Best AI development partner to build an AI assistant on our company documents',
+    kind: 'target',
+  },
   { id: 'abstract-extraordinary', text: 'What is Abstract Extraordinary?', kind: 'company' },
-  { id: 'fractional-ctpo', text: 'Fractional CTPO for an AI startup in Lisbon / Portugal', kind: 'topic' },
-  { id: 'genai-production', text: 'Experts in taking generative AI from prototype to production in Europe', kind: 'topic' },
+  { id: 'who', text: 'Who is Alexandre Carvalho, CTPO?', kind: 'brand' },
 ];
 
 /** Queries containing any of these count as searches for Alexandre by name. */

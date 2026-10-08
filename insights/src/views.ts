@@ -3,7 +3,7 @@ import type { HtmlEscapedString } from 'hono/utils/html';
 import { lineChart } from './chart';
 import { PROMPTS } from './config';
 import {
-  brandRecognition,
+  answerShare,
   type AnswerRow,
   type JobStatus,
   type PeriodComparison,
@@ -113,18 +113,31 @@ function searchCards(google: PeriodComparison | null, bing: PeriodComparison | n
   return html`<div class="cards">${cards}</div>`;
 }
 
-function identityCell(a: AnswerRow): View {
+/**
+ * One answer in the run grid: for target and company questions the headline is
+ * whether Abstract Extraordinary is named; for the brand question, whether
+ * Alexandre is recognised.
+ */
+function answerCell(a: AnswerRow): View {
   if (a.error) return html`<a class="bad" href="/answers/${a.id}">error</a>`;
-  const label: Record<string, [string, string]> = {
-    correct: ['✓ correct', 'ok'],
+  const kind = PROMPTS.find((p) => p.id === a.prompt_id)?.kind ?? 'brand';
+  const identity: Record<string, [string, string]> = {
+    correct: ['✓ recognised', 'ok'],
     wrong_person: ['✗ wrong person', 'bad'],
     not_mentioned: ['– not named', 'muted'],
     unverified: ['? named', 'warn'],
   };
-  const [text, cls] = label[a.identity ?? 'unverified'];
-  return html`<a class="${cls}" href="/answers/${a.id}">${text}</a>${a.cites_own ? html`<span class="tag">cites site</span>` : ''}${
-    a.issues.length ? html`<span class="tag warn">${a.issues.length} issue${a.issues.length > 1 ? 's' : ''}</span>` : ''
-  }`;
+  const [text, cls] =
+    kind !== 'brand' && a.company_named !== null
+      ? a.company_named
+        ? ['✓ AE named', 'ok']
+        : ['– AE not named', 'muted']
+      : identity[a.identity ?? 'unverified'];
+  const tag = (on: boolean, label: string) => (on ? html`<span class="tag">${label}</span>` : '');
+  return html`<a class="${cls}" href="/answers/${a.id}">${text}</a>${tag(a.cites_company, 'cites AE site')}${tag(
+    a.cites_own,
+    'cites alexcarvalho.me',
+  )}${a.issues.length ? html`<span class="tag warn">${a.issues.length} issue${a.issues.length > 1 ? 's' : ''}</span>` : ''}`;
 }
 
 function runGrid(run: RunSummary): View {
@@ -133,7 +146,7 @@ function runGrid(run: RunSummary): View {
   const rows = PROMPTS.map((p) => {
     const cells = engines.map((e) => {
       const a = run.answers.find((x) => x.engine === e && x.prompt_id === p.id);
-      return html`<td>${a ? identityCell(a) : html`<span class="muted">—</span>`}</td>`;
+      return html`<td>${a ? answerCell(a) : html`<span class="muted">—</span>`}</td>`;
     });
     return html`<tr><td>${p.text}<span class="tag">${p.kind}</span></td>${cells}</tr>`;
   });
@@ -201,29 +214,23 @@ export function overviewPage(d: OverviewData): View {
 
   const chronological = [...d.runs].reverse();
   const runEngines = [...new Set(d.runs.flatMap((r) => r.answers.map((a) => a.engine)))];
-  const recognition = lineChart({
-    labels: chronological.map((r) => shortDate(r.started_at)),
-    series: runEngines.map((e) => ({
-      name: ENGINE_LABEL[e] ?? e,
-      color: ENGINE_COLOR[e] ?? COLORS.teal,
-      values: chronological.map((r) => brandRecognition(r, e)),
-    })),
-    format: formatPct,
-    domain: [0, 1],
-  });
-  const citing = lineChart({
-    labels: chronological.map((r) => shortDate(r.started_at)),
-    series: runEngines.map((e) => ({
-      name: ENGINE_LABEL[e] ?? e,
-      color: ENGINE_COLOR[e] ?? COLORS.teal,
-      values: chronological.map((r) => {
-        const answered = r.answers.filter((a) => a.engine === e && !a.error);
-        return answered.length ? answered.filter((a) => a.cites_own).length / answered.length : null;
-      }),
-    })),
-    format: formatPct,
-    domain: [0, 1],
-  });
+  const perRun = (share: (r: RunSummary, engine: string) => number | null) =>
+    lineChart({
+      labels: chronological.map((r) => shortDate(r.started_at)),
+      series: runEngines.map((e) => ({
+        name: ENGINE_LABEL[e] ?? e,
+        color: ENGINE_COLOR[e] ?? COLORS.teal,
+        values: chronological.map((r) => share(r, e)),
+      })),
+      format: formatPct,
+      domain: [0, 1],
+    });
+  const companyNamed = perRun((r, e) =>
+    answerShare(r, e, 'target', (a) => a.company_named === true, (a) => a.company_named !== null),
+  );
+  const companyCited = perRun((r, e) =>
+    answerShare(r, e, 'target', (a) => a.cites_company, (a) => a.company_named !== null),
+  );
 
   const latest = d.runs[0];
   const body = html`
@@ -245,8 +252,8 @@ export function overviewPage(d: OverviewData): View {
 
     <h2>&gt; ai answers</h2>
     <div class="two">
-      <div class="panel"><div class="muted">Recognised correctly on name prompts</div>${raw(recognition)}</div>
-      <div class="panel"><div class="muted">Answers citing alexcarvalho.me</div>${raw(citing)}</div>
+      <div class="panel"><div class="muted">Abstract Extraordinary named · target questions</div>${raw(companyNamed)}</div>
+      <div class="panel"><div class="muted">Target answers citing abstractextraordinary.com</div>${raw(companyCited)}</div>
     </div>
     <h2>&gt; latest ai run${latest ? html` <span class="muted">· ${shortDate(latest.started_at)} · <a href="/runs/${latest.id}">details</a></span>` : ''}</h2>
     <div class="panel">${latest ? runGrid(latest) : html`<p class="empty">No AI runs yet.</p>`}</div>
@@ -281,13 +288,14 @@ export function runsPage(email: string, runs: RunSummary[]): View {
     const answered = r.answers.filter((a) => !a.error);
     return html`<tr><td><a href="/runs/${r.id}">${shortDate(r.started_at)}</a> <span class="muted">${r.trigger}</span></td>
       <td class="n">${answered.length}/${r.answers.length}</td>
-      <td class="n">${answered.filter((a) => a.identity === 'correct').length}</td>
-      <td class="n">${answered.filter((a) => a.cites_own).length}</td>
+      <td class="n">${answered.filter((a) => a.company_named === true).length}</td>
+      <td class="n">${answered.filter((a) => a.cites_company).length}</td>
+      <td class="n">${answered.some((a) => PROMPTS.find((p) => p.id === a.prompt_id)?.kind === 'brand' && a.identity === 'correct') ? '✓' : '–'}</td>
       <td class="n">${answered.reduce((n, a) => n + a.issues.length, 0)}</td></tr>`;
   });
   const body = html`<h1>AI runs</h1><div class="panel">${
     runs.length
-      ? html`<table><tr><th>Run</th><th class="n">Answered</th><th class="n">Correct</th><th class="n">Cite site</th><th class="n">Issues</th></tr>${rows}</table>`
+      ? html`<table><tr><th>Run</th><th class="n">Answered</th><th class="n">AE named</th><th class="n">Cite AE site</th><th class="n">Alexandre recognised</th><th class="n">Issues</th></tr>${rows}</table>`
       : html`<p class="empty">No AI runs yet.</p>`
   }</div>`;
   return layout('AI runs', '/runs', email, body);
@@ -307,7 +315,7 @@ export function answerPage(email: string, a: AnswerRow): View {
     <p class="muted">${ENGINE_LABEL[a.engine] ?? a.engine} · ${a.model ?? ''} · ${shortDate(a.created_at)} · <a href="/runs/${a.run_id}">run</a></p>
     ${a.error
       ? html`<div class="panel bad">${a.error}</div>`
-      : html`<p>${identityCell(a)}</p>
+      : html`<p>${answerCell(a)}</p>
         ${a.issues.length
           ? html`<h2>&gt; issues</h2><div class="panel"><table><tr><th>Claim</th><th>Problem</th></tr>${a.issues.map(
               (i) => html`<tr><td>${i.claim}</td><td class="warn">${i.problem}</td></tr>`,

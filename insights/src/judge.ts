@@ -14,6 +14,8 @@ export interface Issue {
 
 export interface Verdict {
   identity: Identity;
+  /** The answer names Abstract Extraordinary, the studio (the visibility plan's success metric). */
+  company_named: boolean;
   issues: Issue[];
 }
 
@@ -40,14 +42,16 @@ FACTS describes him: Alexandre Carvalho, the Lisbon-based CTPO. Other people sha
 
 Return:
 - identity: whether the answer refers to HIM, the person. "correct" if it names him and describes him in a way consistent with FACTS; "wrong_person" if it presents a different Alexandre Carvalho as him, or mixes his details with another person's; "not_mentioned" if he is not named. An answer that only describes his company, without naming him, is "not_mentioned".
+- company_named: true if the answer names his company, the AI engineering studio Abstract Extraordinary described in FACTS.company (a variant spelling such as "Abstract & Extraordinary" counts when it clearly refers to that studio); false otherwise, including when it is mentioned only as an unnamed source.
 - issues: statements about him, or about his company Abstract Extraordinary, that CONTRADICT FACTS: a wrong employer, role or title, dates, location, company name or achievement. Quote the claim briefly and say what FACTS says instead. Do not report claims that FACTS simply does not cover; they may well be true. Ignore statements about other people and companies. Do not report omissions. Use an empty list when there are none.`;
 
 const SCHEMA = {
   type: 'object',
   additionalProperties: false,
-  required: ['identity', 'issues'],
+  required: ['identity', 'company_named', 'issues'],
   properties: {
     identity: { type: 'string', enum: ['correct', 'wrong_person', 'not_mentioned'] },
+    company_named: { type: 'boolean' },
     issues: {
       type: 'array',
       items: {
@@ -61,12 +65,17 @@ const SCHEMA = {
 };
 
 const NAME_PATTERN = /\b(alexandre|alex)\s+(m\.?\s+)?carvalho\b/i;
+const COMPANY_PATTERN = /\babstract\s*(&|and)?\s*extraordinary\b/i;
 
 export async function judge(env: Env, question: string, answer: string): Promise<Verdict> {
-  // Without an OpenAI key there is no grader: fall back to a name match, which
+  // Without an OpenAI key there is no grader: fall back to name matches, which
   // cannot tell him apart from other people with the same name.
   if (!env.OPENAI_API_KEY) {
-    return { identity: NAME_PATTERN.test(answer) ? 'unverified' : 'not_mentioned', issues: [] };
+    return {
+      identity: NAME_PATTERN.test(answer) ? 'unverified' : 'not_mentioned',
+      company_named: COMPANY_PATTERN.test(answer),
+      issues: [],
+    };
   }
 
   const res = await fetch('https://api.openai.com/v1/responses', {
