@@ -1,4 +1,4 @@
-import { PROMPTS } from './config';
+import { PROMPTS, type TrackedPrompt } from './config';
 import type { Env } from './env';
 import type { Identity, Issue } from './judge';
 import { daysAgo, isBrandQuery, weekStart } from './util';
@@ -169,16 +169,21 @@ export interface AnswerRow {
   answer: string | null;
   sources: string[];
   identity: Identity | null;
+  /** Null for answers graded before company tracking existed. */
+  company_named: boolean | null;
   issues: Issue[];
   cites_own: boolean;
+  cites_company: boolean;
   error: string | null;
   created_at: string;
 }
 
-interface AnswerRecord extends Omit<AnswerRow, 'sources' | 'issues' | 'cites_own'> {
+interface AnswerRecord extends Omit<AnswerRow, 'sources' | 'issues' | 'cites_own' | 'cites_company' | 'company_named'> {
   sources: string;
   issues: string;
   cites_own: number;
+  cites_company: number;
+  company_named: number | null;
 }
 
 const toAnswer = (r: AnswerRecord): AnswerRow => ({
@@ -186,6 +191,8 @@ const toAnswer = (r: AnswerRecord): AnswerRow => ({
   sources: JSON.parse(r.sources) as string[],
   issues: JSON.parse(r.issues) as Issue[],
   cites_own: r.cites_own === 1,
+  cites_company: r.cites_company === 1,
+  company_named: r.company_named === null ? null : r.company_named === 1,
 });
 
 export interface RunSummary {
@@ -229,12 +236,22 @@ export async function answer(env: Env, id: number): Promise<AnswerRow | null> {
   return row ? toAnswer(row) : null;
 }
 
-/** Share of a run's brand prompts each engine answered with the right person. */
-export function brandRecognition(run: RunSummary, engine: string): number | null {
-  const brandIds = new Set(PROMPTS.filter((p) => p.kind === 'brand').map((p) => p.id));
-  const graded = run.answers.filter((a) => a.engine === engine && brandIds.has(a.prompt_id) && !a.error);
+/**
+ * Share of an engine's answers in a run, over the current prompts of `kind`,
+ * that pass `test`. Failed answers and answers graded before the measured
+ * field existed (`isGraded` false) are left out; null when nothing qualifies.
+ */
+export function answerShare(
+  run: RunSummary,
+  engine: string,
+  kind: TrackedPrompt['kind'],
+  test: (a: AnswerRow) => boolean,
+  isGraded: (a: AnswerRow) => boolean = () => true,
+): number | null {
+  const ids = new Set(PROMPTS.filter((p) => p.kind === kind).map((p) => p.id));
+  const graded = run.answers.filter((a) => a.engine === engine && ids.has(a.prompt_id) && !a.error && isGraded(a));
   if (graded.length === 0) return null;
-  return graded.filter((a) => a.identity === 'correct').length / graded.length;
+  return graded.filter(test).length / graded.length;
 }
 
 export interface JobStatus {

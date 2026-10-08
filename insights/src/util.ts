@@ -16,8 +16,9 @@ export function ownSourceLabel(url: string): string | null {
   return OWN_SOURCES.find((s) => s.matches(parsed))?.label ?? null;
 }
 
-export const citesOwnSite = (sources: string[]): boolean =>
-  sources.some((s) => ownSourceLabel(s) === 'alexcarvalho.me');
+/** Whether any source belongs to the owned property with this OWN_SOURCES label. */
+export const citesSource = (sources: string[], label: string): boolean =>
+  sources.some((s) => ownSourceLabel(s) === label);
 
 /** Bing's WCF JSON dates: "/Date(1399100400000)/" or "/Date(1399100400000-0700)/" -> "2014-05-03". */
 export function parseBingDate(value: string): string {
