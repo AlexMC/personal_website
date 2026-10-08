@@ -1,0 +1,42 @@
+name = "insights"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+# process.env, read by ../lib/site.mjs (the shared profile facts).
+compatibility_flags = ["nodejs_compat"]
+
+# Served only on the custom domain, behind Cloudflare Access. No *.workers.dev
+# or preview URLs, which Access would not cover.
+workers_dev = false
+preview_urls = false
+routes = [{ pattern = "insights.alexcarvalho.me", custom_domain = true }]
+
+[triggers]
+# UTC. Must match CRON_DAILY_SEARCH / CRON_WEEKLY_AI in src/index.ts.
+crons = ["30 6 * * *", "0 7 * * 1"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "insights"
+database_id = "bb9425e1-833f-44a0-b30d-4012d45843c3"
+migrations_dir = "migrations"
+
+[observability]
+enabled = true
+
+[vars]
+GSC_SITE = "sc-domain:alexcarvalho.me"
+BING_SITE = "https://alexcarvalho.me/"
+OPENAI_MODEL = "gpt-6-luna"
+JUDGE_MODEL = "gpt-6-luna"
+PERPLEXITY_PRESET = "fast"
+# From the Cloudflare Access application (see README). Until both are set,
+# every request is refused.
+ACCESS_TEAM_DOMAIN = ""
+ACCESS_AUD = ""
+
+# Secrets, set with `npx wrangler secret put <NAME>` (all optional; each
+# source is skipped until its secret exists):
+#   GSC_SERVICE_ACCOUNT   Google service account JSON key
+#   BING_API_KEY          Bing Webmaster Tools API key
+#   OPENAI_API_KEY        OpenAI API key (also used to grade answers)
+#   PERPLEXITY_API_KEY    Perplexity API key

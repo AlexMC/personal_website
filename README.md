@@ -562,6 +562,7 @@ Everything search engines and AI answer engines (ChatGPT, Claude, Perplexity, Go
 - Blog posts can set an optional `updated: 'YYYY-MM-DD'` front-matter field; it feeds `dateModified` and the sitemap `lastmod`.
 - Projects are case studies. Front matter: `company`, `role`, `period`, `location` (shown under the title and used in structured data) and `order` (display order on `/work`). Only `featured: true` projects appear on the home page (first two by `order`). Projects without an `image` get a generated card at `og/work/<slug>.png`.
 - Keep images under ~300 KB. Use a looping `<video autoplay loop muted playsinline>` MP4 instead of animated GIFs.
+- **Measuring it**: [`/insights`](insights/README.md) is a private dashboard (a separate Cloudflare Worker at `insights.alexcarvalho.me`) that tracks Google and Bing rankings and what ChatGPT and Perplexity say about Alexandre, graded against `/lib/site.mjs`.
 
 ## Performance
 
