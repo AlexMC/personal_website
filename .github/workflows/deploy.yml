@@ -6,6 +6,8 @@ on:
     branches: [main]
     paths-ignore:
       - 'data/posts/**/*.md'
+      # Separate Cloudflare Worker, deployed with wrangler; not part of the static site.
+      - 'insights/**'
 
   # Run after auto-share workflow completes (handles blog posts)
   # This ensures deploy waits for bsky metadata to be committed
