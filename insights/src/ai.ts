@@ -20,7 +20,9 @@ export async function runAiCheck(env: Env, trigger: 'cron' | 'manual'): Promise<
     .first<{ id: number }>();
   if (!run) throw new Error('Could not create the run');
 
-  const pairs = engines.flatMap((engine) => PROMPTS.map((prompt) => ({ engine, prompt })));
+  // Prompt-major order, so the concurrent requests are spread across engines
+  // instead of hitting one provider's rate limit all at once.
+  const pairs = PROMPTS.flatMap((prompt) => engines.map((engine) => ({ engine, prompt })));
   const outcomes = await mapLimit(pairs, CONCURRENCY, async ({ engine, prompt }) => {
     const now = new Date().toISOString();
     try {

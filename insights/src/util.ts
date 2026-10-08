@@ -84,4 +84,35 @@ export async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) =>
   return results;
 }
 
+export interface FetchedText {
+  status: number;
+  ok: boolean;
+  body: string;
+}
+
+/**
+ * Make a request, retrying while `isTransient` says the failure is temporary
+ * (rate limits, throttling, 5xx). Waits `delaysMs[n]` before retry n, or the
+ * server's Retry-After when it sends one (capped at 30s). `request` is called
+ * afresh per attempt so per-attempt timeouts restart.
+ */
+export async function fetchRetrying(
+  request: () => Promise<Response>,
+  isTransient: (status: number, body: string) => boolean,
+  delaysMs: number[] = [5_000, 20_000],
+): Promise<FetchedText> {
+  for (let attempt = 0; ; attempt++) {
+    const res = await request();
+    const body = await res.text();
+    if (attempt >= delaysMs.length || !isTransient(res.status, body)) {
+      return { status: res.status, ok: res.ok, body };
+    }
+    const retryAfter = Number(res.headers.get('retry-after'));
+    const wait = retryAfter > 0 ? Math.min(retryAfter * 1000, 30_000) : delaysMs[attempt];
+    const { promise, resolve } = Promise.withResolvers<void>();
+    setTimeout(resolve, wait);
+    await promise;
+  }
+}
+
 export const errorMessage = (e: unknown): string => (e instanceof Error ? e.message : String(e));
