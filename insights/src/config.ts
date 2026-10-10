@@ -31,6 +31,32 @@ export const PROMPTS: TrackedPrompt[] = [
     text: 'Best AI development partner to build an AI assistant on our company documents',
     kind: 'target',
   },
+  // One per concept study page (abstractextraordinary.com/ai-for-…/).
+  {
+    id: 'vertical-due-diligence',
+    text: 'Who can build custom AI for private equity due diligence that answers across a whole data room with sources?',
+    kind: 'target',
+  },
+  {
+    id: 'vertical-consulting',
+    text: 'Who builds AI knowledge systems for consulting firms that find past projects, the people who led them and reusable material?',
+    kind: 'target',
+  },
+  {
+    id: 'vertical-insurance-claims',
+    text: 'Who can build AI that checks an insurance claim file against the policy wording in force on the date of loss?',
+    kind: 'target',
+  },
+  {
+    id: 'vertical-contracts',
+    text: 'Who can build AI for an in-house legal team that tracks contract renewals and shows which amendment is in force?',
+    kind: 'target',
+  },
+  {
+    id: 'vertical-dora',
+    text: 'Who can build AI that checks our supplier contracts against DORA Article 30 requirements?',
+    kind: 'target',
+  },
   { id: 'abstract-extraordinary', text: 'What is Abstract Extraordinary?', kind: 'company' },
   { id: 'who', text: 'Who is Alexandre Carvalho, CTPO?', kind: 'brand' },
 ];
