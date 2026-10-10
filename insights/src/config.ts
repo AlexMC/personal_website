@@ -13,14 +13,19 @@ export interface TrackedPrompt {
 }
 
 export const PROMPTS: TrackedPrompt[] = [
-  { id: 'pilot-who-can-help', text: 'Who can help take our AI pilot to production?', kind: 'target' },
   {
-    id: 'pilot-companies-midsize',
-    text: 'Companies that help mid-size businesses move generative AI from proof of concept to production',
+    id: 'rag-who-builds',
+    text: 'Which companies build custom RAG systems that answer questions across large document collections?',
     kind: 'target',
   },
-  { id: 'pilot-why-fail', text: 'Why do AI pilots fail to reach production, and how do you fix it?', kind: 'target' },
-  { id: 'pilot-cost', text: 'How much does it cost to take a GenAI pilot to production?', kind: 'target' },
+  { id: 'rag-company-midsize', text: 'Best RAG development company for a mid-size business', kind: 'target' },
+  {
+    id: 'rag-due-diligence-compliance',
+    text: 'Who can build an AI system for due diligence or compliance that answers across thousands of documents with sources?',
+    kind: 'target',
+  },
+  { id: 'rag-fix-wrong-answers', text: 'Our RAG chatbot gives wrong answers about our documents. Who can fix it?', kind: 'target' },
+  { id: 'graphrag-consultancy', text: 'Which consultancies implement GraphRAG (knowledge-graph RAG) for companies?', kind: 'target' },
   {
     id: 'knowledge-assistant-partner',
     text: 'Best AI development partner to build an AI assistant on our company documents',
