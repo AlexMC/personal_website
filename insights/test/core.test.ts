@@ -160,11 +160,11 @@ describe('answerShare', () => {
 
   it('measures the company on target questions only, per engine', () => {
     const r = run([
-      answer({ prompt_id: 'pilot-who-can-help', company_named: true }),
-      answer({ prompt_id: 'pilot-cost', company_named: false }),
+      answer({ prompt_id: 'rag-who-builds', company_named: true }),
+      answer({ prompt_id: 'rag-company-midsize', company_named: false }),
       answer({ prompt_id: 'abstract-extraordinary', company_named: true }), // company question: not a target
       answer({ prompt_id: 'who', company_named: true }), // brand question: not a target
-      answer({ engine: 'perplexity', prompt_id: 'pilot-cost', company_named: true }),
+      answer({ engine: 'perplexity', prompt_id: 'rag-company-midsize', company_named: true }),
     ]);
     expect(answerShare(r, 'chatgpt', 'target', named, graded)).toBe(0.5);
     expect(answerShare(r, 'perplexity', 'target', named, graded)).toBe(1);
@@ -173,16 +173,16 @@ describe('answerShare', () => {
 
   it('leaves out failed answers and answers graded before the field existed', () => {
     const r = run([
-      answer({ prompt_id: 'pilot-who-can-help', company_named: true }),
-      answer({ prompt_id: 'pilot-cost', company_named: null, error: 'timeout' }),
-      answer({ prompt_id: 'pilot-why-fail', company_named: null }), // old run, not graded for this
-      answer({ prompt_id: 'retired-prompt', company_named: false }), // no longer tracked
+      answer({ prompt_id: 'rag-who-builds', company_named: true }),
+      answer({ prompt_id: 'rag-company-midsize', company_named: null, error: 'timeout' }),
+      answer({ prompt_id: 'graphrag-consultancy', company_named: null }), // old run, not graded for this
+      answer({ prompt_id: 'pilot-cost', company_named: false }), // retired prompt, no longer tracked
     ]);
     expect(answerShare(r, 'chatgpt', 'target', named, graded)).toBe(1);
   });
 
   it('scores Alexandre on the brand question', () => {
-    const r = run([answer({ prompt_id: 'who', identity: 'correct' }), answer({ prompt_id: 'pilot-cost', identity: 'wrong_person' })]);
+    const r = run([answer({ prompt_id: 'who', identity: 'correct' }), answer({ prompt_id: 'rag-company-midsize', identity: 'wrong_person' })]);
     expect(answerShare(r, 'chatgpt', 'brand', (a) => a.identity === 'correct')).toBe(1);
   });
 });
