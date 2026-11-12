@@ -35,6 +35,7 @@ const escapeXml = (value) =>
 const posts = readCollection('data/posts')
   .map((post) => ({ ...post, date: isoDate(post.date), path: `/blog/${post.slug}` }))
   .sort((a, b) => b.date.localeCompare(a.date))
+const products = readCollection('data/products').sort((a, b) => (a.order ?? 99) - (b.order ?? 99))
 const projects = readCollection('data/projects')
   .map((project) => ({ ...project, path: `/work/${project.slug}` }))
   .sort((a, b) => (a.order ?? 99) - (b.order ?? 99))
@@ -45,7 +46,7 @@ const slashpages = readCollection('data/slashpages')
 
 function sitemap() {
   const entries = [
-    ...['/', '/about', '/work-with-me', '/work', '/blog', '/tools', '/slashes'].map((p) => ({ path: p })),
+    ...['/', '/about', '/work-with-me', '/products', '/work', '/blog', '/tools', '/slashes'].map((p) => ({ path: p })),
     ...posts.map((post) => ({ path: post.path, lastmod: isoDate(post.updated || post.date) })),
     ...projects.map((project) => ({ path: project.path })),
     ...slashpages.map((page) => ({ path: page.path, lastmod: page.updatedAt && isoDate(page.updatedAt) })),
@@ -122,6 +123,10 @@ function llmsTxt() {
     '## Writing',
     '',
     ...posts.map((post) => link(post.title, post.path, `${post.excerpt ? post.excerpt.trim() : ''} (${post.date})`)),
+    '',
+    '## Products',
+    '',
+    ...products.map((product) => `- [${product.title}](${product.link}): ${product.description}`),
     '',
     '## Work',
     '',
