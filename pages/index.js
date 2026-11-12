@@ -9,7 +9,7 @@ import ContributionsChart from '../components/ContributionsChart'
 import Newsletter from '../components/Newsletter'
 import { getAllMarkdownFiles } from '../lib/markdown'
 
-export default function Home({ posts, projects, tools }) {
+export default function Home({ posts, products, projects, tools }) {
   return (
     <Layout>
       <Seo path="/" />
@@ -41,6 +41,15 @@ export default function Home({ posts, projects, tools }) {
         </section>
 
         <section>
+          <h2 className="text-2xl font-bold mb-4 text-primary">&gt; products</h2>
+          <p className="text-primary-light mb-12">Things I&apos;ve built and shipped myself.</p>
+          <Projects projects={products} basePath="/products" />
+          <Link href="/products" className="inline-block mt-8 text-primary-light hover:text-primary transition-colors">
+            ALL PRODUCTS &rarr;
+          </Link>
+        </section>
+
+        <section>
           <h2 className="text-2xl font-bold mb-12 text-primary">&gt; featured projects</h2>
           <Projects projects={projects} limit={2} />
         </section>
@@ -69,6 +78,9 @@ export default function Home({ posts, projects, tools }) {
 
 export async function getStaticProps() {
   const posts = getAllMarkdownFiles('data/posts')
+  const products = getAllMarkdownFiles('data/products')
+    .filter((product) => product.featured)
+    .sort((a, b) => (a.order ?? 99) - (b.order ?? 99))
   const projects = getAllMarkdownFiles('data/projects')
     .filter((project) => project.featured)
     .sort((a, b) => (a.order ?? 99) - (b.order ?? 99))
@@ -81,6 +93,7 @@ export async function getStaticProps() {
   return {
     props: {
       posts,
+      products,
       projects,
       tools
     }

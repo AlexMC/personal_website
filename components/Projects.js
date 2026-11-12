@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { getImagePath } from '../lib/utils';
 import { cardPath } from '../lib/site.mjs';
 
-const Projects = ({ projects, limit }) => {
+// basePath: where each card links to (/work case studies, /products pages).
+const Projects = ({ projects, limit, basePath = '/work' }) => {
   const displayProjects = limit ? projects.slice(0, limit) : projects;
 
   if (!displayProjects || displayProjects.length === 0) {
@@ -13,7 +14,7 @@ const Projects = ({ projects, limit }) => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {displayProjects.map((project, index) => (
         <div key={index} className="block bg-surface p-6 border border-primary-dark hover:border-primary transition-colors duration-300 group">
-          <Link href={`/work/${project.slug}`} className="block">
+          <Link href={`${basePath}/${project.slug}`} className="block">
             <div className="relative h-48 mb-6 bg-primary-dark/20">
               <img
                 src={project.image ? getImagePath(project.image) : cardPath('work', project.slug)}
@@ -23,6 +24,12 @@ const Projects = ({ projects, limit }) => {
                 }`}
               />
             </div>
+            {project.status && (
+              <p className="text-xs mb-2 text-primary-light">
+                <span className="text-primary">●</span> {project.status.toUpperCase()}
+                {project.platform && <> · {project.platform.toUpperCase()}</>}
+              </p>
+            )}
             <h3 className="text-xl font-bold mb-3 text-primary">{project.title}</h3>
             <p className="text-primary-light mb-6">{project.description}</p>
             <div className="flex flex-wrap gap-2">
@@ -44,7 +51,7 @@ const Projects = ({ projects, limit }) => {
                 rel="noopener noreferrer"
                 className="text-primary-light hover:text-primary transition-colors"
               >
-                VIEW PROJECT &rarr;
+                {project.linkLabel || 'VIEW PROJECT'} &rarr;
               </a>
             </div>
           )}
