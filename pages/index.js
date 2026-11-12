@@ -43,7 +43,7 @@ export default function Home({ posts, products, projects, tools }) {
         <section>
           <h2 className="text-2xl font-bold mb-4 text-primary">&gt; products</h2>
           <p className="text-primary-light mb-12">Things I&apos;ve built and shipped myself.</p>
-          <Projects projects={products} basePath="/products" />
+          <Projects projects={products} external />
           <Link href="/products" className="inline-block mt-8 text-primary-light hover:text-primary transition-colors">
             ALL PRODUCTS &rarr;
           </Link>

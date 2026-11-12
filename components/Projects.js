@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { getImagePath } from '../lib/utils';
 import { cardPath } from '../lib/site.mjs';
 
-// basePath: where each card links to (/work case studies, /products pages).
-const Projects = ({ projects, limit, basePath = '/work' }) => {
+// external: cards open the item's own site (products) instead of a /work case study.
+const Projects = ({ projects, limit, external = false }) => {
   const displayProjects = limit ? projects.slice(0, limit) : projects;
 
   if (!displayProjects || displayProjects.length === 0) {
@@ -14,7 +14,11 @@ const Projects = ({ projects, limit, basePath = '/work' }) => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {displayProjects.map((project, index) => (
         <div key={index} className="block bg-surface p-6 border border-primary-dark hover:border-primary transition-colors duration-300 group">
-          <Link href={`${basePath}/${project.slug}`} className="block">
+          <Link
+            href={external ? project.link : `/work/${project.slug}`}
+            className="block"
+            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          >
             <div className="relative h-48 mb-6 bg-primary-dark/20">
               <img
                 src={project.image ? getImagePath(project.image) : cardPath('work', project.slug)}

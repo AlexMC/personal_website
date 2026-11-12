@@ -28,7 +28,7 @@ export default function Products({ products }) {
 
         <section>
           <h1 className="text-2xl font-bold mb-12 text-primary">&gt; products</h1>
-          <Projects projects={products} basePath="/products" />
+          <Projects projects={products} external />
         </section>
       </div>
     </Layout>
