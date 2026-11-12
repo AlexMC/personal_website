@@ -39,6 +39,11 @@ Alexandre Carvalho (also known as Alex Carvalho) is based in Lisbon, Portugal. H
 - [Are developers missing the mark on using AI?](https://alexcarvalho.me/blog/are-developers-missing-the-mark-on-ai): When used correctly, AI can augment a developer's capacity by orders of magnitude. But here's the problem: many developers aren’t using AI correctly. (2025-01-20)
 - [Most Useful AI-Enhanced Tools for Productivity and Development](https://alexcarvalho.me/blog/ai-tools-for-productivity-and-development): I use AI daily, not only when writing code or more broadly working on product development, but also on almost everything I do while dealing with devices (2025-01-15)
 
+## Products
+
+- [SetScout: Never Overpay for LEGO Again](https://setscout.app): A LEGO price tracker that watches 90+ retailers all day, alerts you when a set you want drops, and ranks the whole catalogue for people buying to hold.
+- [Ghost Runner: Race Your Last Run](https://getghostrunner.com): An iPhone and Apple Watch app that turns your Apple Health runs into routes, so you can race the ghost of your best time live on your wrist.
+
 ## Work
 
 - [Here: Real-Time AI De-Aging for Robert Zemeckis' Film](https://alexcarvalho.me/work/here-tech-tools): (CPTO at Metaphysic.ai) Led the ML research, engineering and product teams behind the AI face replacement and de-aging of Tom Hanks and Robin Wright in Robert Zemeckis' *Here*.
